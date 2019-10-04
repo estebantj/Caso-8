@@ -36,11 +36,14 @@ def createSectors():
     print(sectorsY)
 
     lista = crearMuestreo()
-    print(lista[0])
+    print(lista[0][0])
     print(lista[4])
     print(lista[9])
     print(lista[15])
-    print(len(lista))
+
+    rgb_im = image.convert('RGB')
+    r, g, b = rgb_im.getpixel((lista[5][16][0], lista[5][16][1]))
+    print("Cantidad de color en el Pixel -> Rojo: ", r, " Verde: ", g, " Azul: ", b)
 
 if __name__ == "__main__" :
     createSectors()
