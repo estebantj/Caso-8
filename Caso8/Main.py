@@ -1,5 +1,5 @@
 from Constants import *
-from PIL import Image
+from PIL import Image, ImageDraw
 
 
 def openImage(pPath):
@@ -21,6 +21,15 @@ def createSectors():
         sectorsX += [linePixelPositionX]
         linePixelPositionY += numberOfPixelsPerSectorY
         sectorsY += [linePixelPositionY]
+
+    imageForDrawing = ImageDraw.Draw(image)
+    for coordinateNumber in range(0, numbersOfLines):
+        x = sectorsX[coordinateNumber]
+        y = sectorsY[coordinateNumber]
+        imageForDrawing.line([(x, 0), (x, imageHeight)], fill="red", width=1)
+        imageForDrawing.line([(0, y), (imageWidth, y)], fill="red", width=1)
+
+    image.show()
 
     print(sectorsX)
     print(sectorsY)
