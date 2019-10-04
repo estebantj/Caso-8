@@ -1,19 +1,21 @@
+import random
 def crearMuestreo():
-    listaFinal = []
-    aumento = 1
-    cont1 = 1
-    cont2 = 256
-    for i in range(0, 4):
-        nuevaLista = []
-        for j in range(0, 4):
-            lista = []
-            cont2 *= aumento;
-            for x in range(cont1, cont2):
-                for y in range(cont1, cont2):
-                    lista += [[x, y]]
-            cont1 = cont2
-            aumento += 1
-        nuevaLista += [lista]
-        listaFinal += [[nuevaLista]]
-
-    return listaFinal
+    muestreoDeSectores = []
+    puntoX1 = 0
+    puntoY1 = 256
+    puntoX2 = 0
+    puntoY2 = 256
+    divisionSectores = 256
+    for desplazamientoHorizontal in range(2, 6):
+        for desplazamientoVertical in range(2, 6):
+            sectores = []
+            for creacionDeMuestras in range(0, 20):
+                sectores += [[random.randint(puntoX1, puntoY1), random.randint(puntoX2, puntoY2)]]
+            muestreoDeSectores += [sectores]
+            puntoX1 = puntoY1
+            puntoY1 = divisionSectores * desplazamientoVertical
+        puntoX2 = divisionSectores * (desplazamientoHorizontal - 1)
+        puntoY2 = divisionSectores * desplazamientoHorizontal
+        puntoX1 = 0
+        puntoY1 = 256
+    return muestreoDeSectores

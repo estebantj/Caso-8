@@ -35,7 +35,12 @@ def createSectors():
     print(sectorsX)
     print(sectorsY)
 
-    ##lista = crearMuestreo()
+    lista = crearMuestreo()
+    print(lista[0])
+    print(lista[4])
+    print(lista[9])
+    print(lista[15])
+    print(len(lista))
 
 if __name__ == "__main__" :
     createSectors()
