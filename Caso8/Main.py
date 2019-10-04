@@ -12,8 +12,8 @@ def createSectors():
     imageWidth, imageHeight = image.size
     sectorsX = []
     sectorsY = []
-    numberOfPixelsPerSectorX = imageWidth/numbersOfLines
-    numberOfPixelsPerSectorY = imageHeight/numbersOfLines
+    numberOfPixelsPerSectorX = imageWidth/(numbersOfLines+1)
+    numberOfPixelsPerSectorY = imageHeight/(numbersOfLines+1)
     linePixelPositionX = 0
     linePixelPositionY = 0
     for actualNumberOfLines in range(0, numbersOfLines):
