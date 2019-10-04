@@ -1,4 +1,5 @@
 from Constants import *
+from Muestreo import *
 from PIL import Image, ImageDraw
 
 
@@ -34,6 +35,7 @@ def createSectors():
     print(sectorsX)
     print(sectorsY)
 
+    ##lista = crearMuestreo()
 
 if __name__ == "__main__" :
     createSectors()
