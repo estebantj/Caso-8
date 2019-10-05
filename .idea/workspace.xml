@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eb98bb78-018d-4e3e-9ef5-303d1688bb2f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Caso8/Poligonos.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Caso8/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caso8/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Caso8/Muestreo.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caso8/Muestreo.py" afterDir="false" />
@@ -12,9 +13,21 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Caso8/Muestreo.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/Caso8/Poligonos.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/Caso8/Main.py" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProjectId" id="1RikFdBEZKJBXgsR9Q1iOkkmSkU" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -109,5 +122,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Caso8/Muestreo.py</url>
+          <line>25</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

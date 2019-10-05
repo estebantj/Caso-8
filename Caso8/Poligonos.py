@@ -1,0 +1,2 @@
+def creacionDePoligonos(listaColoresSector):
+    puntosDelPoligono = []

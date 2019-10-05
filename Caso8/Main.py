@@ -1,5 +1,6 @@
 from Constants import *
 from Muestreo import *
+from Poligonos import *
 from PIL import Image, ImageDraw
 
 
@@ -37,14 +38,16 @@ def createSectors():
 
 if __name__ == "__main__" :
     image = openImage(Images[0])
-    createSectors()
+    # createSectors()
     listaMuestras = crearMuestreo()
-    print("Lista de muestras del sector 1: ")
-    print(listaMuestras[0])
-    print("Lista de muestras del sector 5: ")
-    print(listaMuestras[4])
-    print("Lista de muestras del sector 9: ")
-    print(listaMuestras[8])
-    print("Lista de muestras del sector 13: ")
-    print(listaMuestras[12])
-    seleccionarMuestreo(image, listaMuestras)
+    print("Size Lista: ", len(listaMuestras))
+    # print("Lista de muestras del sector 1: ")
+    # print(listaMuestras[0])
+    # print("Lista de muestras del sector 5: ")
+    # print(listaMuestras[4])
+    # print("Lista de muestras del sector 9: ")
+    # print(listaMuestras[8])
+    # print("Lista de muestras del sector 13: ")
+    # print(listaMuestras[12])
+    listaColoresSectores = seleccionarMuestreo(image, listaMuestras)
+    creacionDePoligonos(listaColoresSectores)
