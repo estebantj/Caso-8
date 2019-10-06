@@ -1,0 +1,20 @@
+class Sector:
+    def __init__(self, pCoodinatesSamples):
+        self.__coordinatesSamples = pCoodinatesSamples
+        self.__colorsSamples = []
+        self.__sectorNumber = 0
+        self.__whitePercentaje = 0
+        self.__nonWhitePercentaje = 0
+
+    def setColorSamples(self, pColorSamples):
+        self.__colorsSamples = pColorSamples
+
+    def setSectorNumber(self, pSectorNumber):
+        self.__sectorNumber = pSectorNumber
+
+    def setWhitePercentaje(self, pWhitePercentaje):
+        self.__whitePercentaje = pWhitePercentaje
+        self.__nonWhitePercentaje = 100 - pWhitePercentaje
+
+    def getCoordinateSamples(self):
+        return self.__coordinatesSamples
