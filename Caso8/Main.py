@@ -1,6 +1,6 @@
 import Constants
-from Muestreo import *
-from Poligonos import *
+from Sampling import *
+from Polygons import *
 from PIL import Image, ImageDraw
 
 
@@ -46,7 +46,7 @@ if __name__ == "__main__" :
     print("Size Lista: ", len(sampleLists))
     createColorsSamples(image, sampleLists)
     polygonCreation(sampleLists)
-    archivo = open("index.html", "w")
+    archivo = open("View.html", "w")
     archivo.write(Constants.HTML1)
     # Create svg
     pointsList= ["220,10", "300,210", "170,250", "123,234"]
