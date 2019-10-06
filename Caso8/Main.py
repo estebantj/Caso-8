@@ -1,4 +1,4 @@
-from Constants import *
+import Constants
 from Muestreo import *
 from Poligonos import *
 from PIL import Image, ImageDraw
@@ -6,26 +6,27 @@ from PIL import Image, ImageDraw
 
 def openImage(pPath):
     newImage = Image.open(pPath)
+    Constants.IMAGESIZE = newImage.size
     return newImage
 
 
 def createSectors():
-    image = openImage(Images[0])
+    image = openImage(Constants.IMAGES[0])
     imageWidth, imageHeight = image.size
     sectorsX = []
     sectorsY = []
-    numberOfPixelsPerSectorX = imageWidth/(numbersOfLines+1)
-    numberOfPixelsPerSectorY = imageHeight/(numbersOfLines+1)
+    numberOfPixelsPerSectorX = imageWidth/(Constants.NUMBERS_OF_LINES + 1)
+    numberOfPixelsPerSectorY = imageHeight/(Constants.NUMBERS_OF_LINES + 1)
     linePixelPositionX = 0
     linePixelPositionY = 0
-    for actualNumberOfLines in range(0, numbersOfLines):
+    for actualNumberOfLines in range(0, Constants.NUMBERS_OF_LINES):
         linePixelPositionX += numberOfPixelsPerSectorX
         sectorsX += [linePixelPositionX]
         linePixelPositionY += numberOfPixelsPerSectorY
         sectorsY += [linePixelPositionY]
 
     imageForDrawing = ImageDraw.Draw(image)
-    for coordinateNumber in range(0, numbersOfLines):
+    for coordinateNumber in range(0, Constants.NUMBERS_OF_LINES):
         x = sectorsX[coordinateNumber]
         y = sectorsY[coordinateNumber]
         imageForDrawing.line([(x, 0), (x, imageHeight)], fill="red", width=1)
@@ -36,18 +37,22 @@ def createSectors():
     print(sectorsX)
     print(sectorsY)
 
+
 if __name__ == "__main__" :
-    image = openImage(Images[0])
-    # createSectors()
-    listaMuestras = crearMuestreo()
-    print("Size Lista: ", len(listaMuestras))
-    # print("Lista de muestras del sector 1: ")
-    # print(listaMuestras[0])
-    # print("Lista de muestras del sector 5: ")
-    # print(listaMuestras[4])
-    # print("Lista de muestras del sector 9: ")
-    # print(listaMuestras[8])
-    # print("Lista de muestras del sector 13: ")
-    # print(listaMuestras[12])
-    listaColoresSectores = seleccionarMuestreo(image, listaMuestras)
-    creacionDePoligonos(listaColoresSectores)
+    image = openImage(Constants.IMAGES[0])
+    #createSectors()
+    sampleLists = createSample()
+    #sampleLists.sort(key=lambda sector: sector.getSectorNumber(), reverse=False)
+    print("Size Lista: ", len(sampleLists))
+    createColorsSamples(image, sampleLists)
+    polygonCreation(sampleLists)
+    archivo = open("index.html", "w")
+    archivo.write(Constants.HTML1)
+    # Create svg
+    pointsList= ["220,10", "300,210", "170,250", "123,234"]
+    svg = createSVG(pointsList, sampleLists[0].getColorSample()[0])
+    archivo.write(svg)
+    archivo.write(Constants.HTML2)
+    archivo.close()
+
+    print("s")
