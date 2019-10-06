@@ -16,5 +16,8 @@ class Sector:
         self.__whitePercentaje = pWhitePercentaje
         self.__nonWhitePercentaje = 100 - pWhitePercentaje
 
+    def getColorSample(self):
+        return self.__colorsSamples
+
     def getCoordinateSamples(self):
         return self.__coordinatesSamples

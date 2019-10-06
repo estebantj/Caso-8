@@ -41,8 +41,8 @@ def createSectors():
 if __name__ == "__main__" :
     image = openImage(Constants.IMAGES[0])
     # createSectors()
-    listaMuestras = crearMuestreo()
-    print("Size Lista: ", len(listaMuestras))
-    seleccionarMuestreo(image, listaMuestras)
+    sampleLists = createSample()
+    print("Size Lista: ", len(sampleLists))
+    createColorsSamples(image, sampleLists)
 
-    #sectorsWhitrPercentajeList = estimateWhiteColor(listaMuestras)
+    print("s")
