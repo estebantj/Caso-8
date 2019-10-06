@@ -12,6 +12,9 @@ class Sector:
     def setSectorNumber(self, pSectorNumber):
         self.__sectorNumber = pSectorNumber
 
+    def getSectorNumber(self):
+        return self.__sectorNumber
+
     def setWhitePercentaje(self, pWhitePercentaje):
         self.__whitePercentaje = pWhitePercentaje
         self.__nonWhitePercentaje = 100 - pWhitePercentaje
@@ -21,3 +24,6 @@ class Sector:
 
     def getCoordinateSamples(self):
         return self.__coordinatesSamples
+
+    def __str__(self):
+        return "Sector Number: " + str(self.__sectorNumber)

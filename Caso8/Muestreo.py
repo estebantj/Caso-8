@@ -13,7 +13,6 @@ def createSample():
     for horizontalDisplacement in range(1, 5):
         pointX2 = pointY2
         pointY2 = sectorDivision * horizontalDisplacement
-
         for verticalDisplacement in range(1, 5):
             sectors = []
             pointX1 = pointY1

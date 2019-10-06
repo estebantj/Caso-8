@@ -40,9 +40,19 @@ def createSectors():
 
 if __name__ == "__main__" :
     image = openImage(Constants.IMAGES[0])
-    # createSectors()
+    #createSectors()
     sampleLists = createSample()
+    #sampleLists.sort(key=lambda sector: sector.getSectorNumber(), reverse=False)
     print("Size Lista: ", len(sampleLists))
     createColorsSamples(image, sampleLists)
+    polygonCreation(sampleLists)
+    archivo = open("index.html", "w")
+    archivo.write(Constants.HTML1)
+    # Create svg
+    pointsList= ["220,10", "300,210", "170,250", "123,234"]
+    svg = createSVG(pointsList, sampleLists[0].getColorSample()[0])
+    archivo.write(svg)
+    archivo.write(Constants.HTML2)
+    archivo.close()
 
     print("s")
