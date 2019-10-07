@@ -4,6 +4,7 @@ import Constants
 from Sector import Sector
 from AdjacencyMatrix import *
 
+
 def createSample():
     sampleOfSectors = []
     pointX1 = pointY1 = 0
@@ -34,6 +35,7 @@ def createSample():
         pointY1 = 0
     return sampleOfSectors
 
+
 def createColorsSamples(image, sampleLists):
     rgb_im = image.convert('RGB')
     for eachSector in sampleLists:
@@ -47,9 +49,9 @@ def createColorsSamples(image, sampleLists):
             except IndexError:
                 print("BIG ASS ERROR")
                 print((eachCoordinateSample[0], eachCoordinateSample[1]))
-            sampleColor = Color(r, g, b)
+            sampleColor = Color(r, g, b, eachCoordinateSample[0], eachCoordinateSample[1])
             if sampleColor.isWhite():
-                whiteSamples +=1
+                whiteSamples += 1
             else:
                 nonWhiteSamples += 1
             colorsList += [sampleColor]
@@ -57,6 +59,7 @@ def createColorsSamples(image, sampleLists):
         eachSector.separateColorsSamples()
         whitePercentaje = (whiteSamples * 100) / Constants.NUMBERS_OF_SAMPLES_PER_SECTOR
         eachSector.setWhitePercentaje(whitePercentaje)
+
 
 def createAdjacencyMatrix(sampleLists):
     # horizontalList = []
@@ -95,7 +98,8 @@ def createAdjacencyMatrix(sampleLists):
                 #     print("No sirvio")
         # print("---------------------")
     g.toString()
-            #1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16
+    return g
+    # 1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16
     # adjacencyMatrix = [[[0],[1],[0],[0],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]],1
     #                    [[1],[0],[1],[0],[1],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0],[0]],2
     #                    [[0],[1],[0],[1],[0],[1],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0]],3
@@ -112,18 +116,3 @@ def createAdjacencyMatrix(sampleLists):
     #                    [[0],[0],[0],[0],[0],[0],[0],[0],[1],[1],[1],[0],[1],[0],[1],[0]],14
     #                    [[0],[0],[0],[0],[0],[0],[0],[0],[0],[1],[1],[1],[0],[1],[0],[1]],15
     #                    [[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[1],[1],[0],[0],[1],[0]],16]
-
-"""
-def estimateWhiteColor(sectorsList):
-    for sector in sectorsList:
-        whiteSamples = 0
-        nonWhiteSamples = 0
-        for color in sector.getColorSample():
-            if color.isWhite():
-                whiteSamples += 1
-            else:
-                nonWhiteSamples += 1
-        whitePercentaje = (whiteSamples * 100) / Constants.NUMBERS_OF_SAMPLES_PER_SECTOR
-        sector.setWhitePercentaje(whitePercentaje)
-        print("Sector white percentaje: ", whitePercentaje)
-"""
