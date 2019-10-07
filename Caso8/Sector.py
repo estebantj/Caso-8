@@ -5,6 +5,7 @@ class Sector:
         self.__sectorNumber = 0
         self.__whitePercentaje = 0
         self.__nonWhitePercentaje = 0
+        # self.__adjacency = 0
 
     def setColorSamples(self, pColorSamples):
         self.__colorsSamples = pColorSamples
