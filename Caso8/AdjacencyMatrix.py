@@ -25,7 +25,7 @@ class Graph(object):
         return self.size
 
     def toString(self):
+        count = 1
         for row in self.adjMatrix:
-            for val in row:
-                print('{:4}'.format(val)),
-            print
+            print("[", count, "]: ", row)
+            count += 1

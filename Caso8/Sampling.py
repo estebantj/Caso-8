@@ -69,11 +69,11 @@ def createAdjacencyMatrix(sampleLists):
     #         horizontalList += [sepateBySector]
     #         finalList += [horizontalList]
     #         horizontalList = []
-    g = Graph(20)
+    g = Graph(len(sampleLists))
     for adjacencyBySector in range(0, len(sampleLists)):
         for adjacencySectorBySector in range(0, len(sampleLists)):
             if adjacencyBySector != adjacencySectorBySector:
-                print("Nodo: ", adjacencyBySector, " Valor: ", adjacencySectorBySector)
+                # print("Nodo: ", adjacencyBySector, " Valor: ", adjacencySectorBySector)
                 if (adjacencyBySector - 1) == adjacencySectorBySector and (adjacencyBySector) % 4 != 0:
                     g.addEdge(adjacencyBySector, adjacencySectorBySector)
                 elif (adjacencyBySector + 1) == adjacencySectorBySector and (adjacencyBySector + 1) % 4 != 0:
@@ -90,10 +90,10 @@ def createAdjacencyMatrix(sampleLists):
                     g.addEdge(adjacencyBySector, adjacencySectorBySector)
                 elif (adjacencyBySector + 5) == adjacencySectorBySector:
                     g.addEdge(adjacencyBySector, adjacencySectorBySector)
-                else:
-                    print("No sirvio")
-        print("---------------------")
-    # g.toString()
+                # else:
+                #     print("No sirvio")
+        # print("---------------------")
+    g.toString()
             #1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16
     # adjacencyMatrix = [[[0],[1],[0],[0],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]],1
     #                    [[1],[0],[1],[0],[1],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0],[0]],2
