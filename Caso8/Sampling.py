@@ -54,6 +54,7 @@ def createColorsSamples(image, sampleLists):
                 nonWhiteSamples += 1
             colorsList += [sampleColor]
         eachSector.setColorSamples(colorsList)
+        eachSector.separateColorsSamples()
         whitePercentaje = (whiteSamples * 100) / Constants.NUMBERS_OF_SAMPLES_PER_SECTOR
         eachSector.setWhitePercentaje(whitePercentaje)
 
