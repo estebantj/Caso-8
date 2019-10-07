@@ -4,7 +4,6 @@ import Constants
 from Sector import Sector
 from AdjacencyMatrix import *
 
-
 def createSample():
     sampleOfSectors = []
     pointX1 = pointY1 = 0
@@ -35,7 +34,6 @@ def createSample():
         pointY1 = 0
     return sampleOfSectors
 
-
 def createColorsSamples(image, sampleLists):
     rgb_im = image.convert('RGB')
     for eachSector in sampleLists:
@@ -60,19 +58,7 @@ def createColorsSamples(image, sampleLists):
         whitePercentaje = (whiteSamples * 100) / Constants.NUMBERS_OF_SAMPLES_PER_SECTOR
         eachSector.setWhitePercentaje(whitePercentaje)
 
-
 def createAdjacencyMatrix(sampleLists):
-    # horizontalList = []
-    # finalList = []
-    # for sepateBySector in range(0, len(sampleLists)):
-    #     if (sepateBySector + 1) % 4 != 0:
-    #         # horizontalList += [Sector.getCoordinateSamples(sampleLists[sepateBySector])]
-    #         horizontalList += [sepateBySector]
-    #     else:
-    #         # horizontalList += [Sector.getCoordinateSamples(sampleLists[sepateBySector])]
-    #         horizontalList += [sepateBySector]
-    #         finalList += [horizontalList]
-    #         horizontalList = []
     g = Graph(len(sampleLists))
     for adjacencyBySector in range(0, len(sampleLists)):
         for adjacencySectorBySector in range(0, len(sampleLists)):
@@ -94,10 +80,7 @@ def createAdjacencyMatrix(sampleLists):
                     g.addEdge(adjacencyBySector, adjacencySectorBySector)
                 elif (adjacencyBySector + 5) == adjacencySectorBySector:
                     g.addEdge(adjacencyBySector, adjacencySectorBySector)
-                # else:
-                #     print("No sirvio")
-        # print("---------------------")
-    g.toString()
+    # g.toString()
     return g
     # 1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16
     # adjacencyMatrix = [[[0],[1],[0],[0],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]],1

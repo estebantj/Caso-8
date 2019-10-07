@@ -3,12 +3,10 @@ from Sampling import *
 from Polygons import *
 from PIL import Image, ImageDraw
 
-
 def openImage(pPath):
     newImage = Image.open(pPath)
     Constants.IMAGESIZE = newImage.size
     return newImage
-
 
 def createSectors():
     image = openImage(Constants.IMAGES[0])
@@ -37,12 +35,11 @@ def createSectors():
     print(sectorsX)
     print(sectorsY)
 
-
 if __name__ == "__main__" :
     image = openImage(Constants.IMAGES[0])
-    #createSectors()
+    # createSectors()
     sampleLists = createSample()
-    #sampleLists.sort(key=lambda sector: sector.getSectorNumber(), reverse=False)
+    # sampleLists.sort(key=lambda sector: sector.getSectorNumber(), reverse=False)
     # print("Size Lista: ", len(sampleLists))
     # for i in range(0, len(sampleLists)):
     #     print("Sector ", i + 1)
@@ -58,9 +55,9 @@ if __name__ == "__main__" :
     polygonCreation(sampleLists, adjacencyGraph)
 
     # Create svg
-    #pointsList = ["220,10", "300,210", "170,250", "123,234"]
-    #htmlPolygon = createHtmlPolygon(pointsList, sampleLists[0].getColorSample()[0])
-    #archivo.write(htmlPolygon)
+    # pointsList = ["220,10", "300,210", "170,250", "123,234"]
+    # htmlPolygon = createHtmlPolygon(pointsList, sampleLists[0].getColorSample()[0])
+    # archivo.write(htmlPolygon)
 
     Constants.HTMLFILE.write(Constants.HTML2)
     Constants.HTMLFILE.close()

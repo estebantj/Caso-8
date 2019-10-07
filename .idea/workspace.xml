@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="084817ba-afce-4f2a-accb-2a4646440b6b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Caso8/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caso8/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Caso8/Polygons.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caso8/Polygons.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Caso8/Sampling.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caso8/Sampling.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Caso8/View.html" beforeDir="false" afterPath="$PROJECT_DIR$/Caso8/View.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -112,8 +115,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Caso8/Polygons.py</url>
-          <line>9</line>
+          <line>8</line>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Caso8/Polygons.py</url>
+          <line>24</line>
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
