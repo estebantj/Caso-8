@@ -43,21 +43,22 @@ if __name__ == "__main__" :
     #createSectors()
     sampleLists = createSample()
     #sampleLists.sort(key=lambda sector: sector.getSectorNumber(), reverse=False)
-    print("Size Lista: ", len(sampleLists))
-    for i in range(0, len(sampleLists)):
-        print("Sector ", i + 1)
-        print(Sector.getCoordinateSamples(sampleLists[i]))
-        print("//////////////")
-        
+    # print("Size Lista: ", len(sampleLists))
+    # for i in range(0, len(sampleLists)):
+    #     print("Sector ", i + 1)
+    #     print(Sector.getCoordinateSamples(sampleLists[i]))
+    #     print("//////////////")
+
     createColorsSamples(image, sampleLists)
     polygonCreation(sampleLists)
     archivo = open("View.html", "w")
     archivo.write(Constants.HTML1)
     # Create svg
-    pointsList= ["220,10", "300,210", "170,250", "123,234"]
+    pointsList = ["220,10", "300,210", "170,250", "123,234"]
     svg = createSVG(pointsList, sampleLists[0].getColorSample()[0])
     archivo.write(svg)
     archivo.write(Constants.HTML2)
     archivo.close()
 
-    print("s")
+    createAdjacencyMatrix(sampleLists)
+    print("Final")

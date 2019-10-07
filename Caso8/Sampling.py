@@ -2,7 +2,7 @@ import random
 from Colors import Color
 import Constants
 from Sector import Sector
-
+from AdjacencyMatrix import *
 
 def createSample():
     sampleOfSectors = []
@@ -34,7 +34,6 @@ def createSample():
         pointY1 = 0
     return sampleOfSectors
 
-
 def createColorsSamples(image, sampleLists):
     rgb_im = image.convert('RGB')
     for eachSector in sampleLists:
@@ -59,26 +58,59 @@ def createColorsSamples(image, sampleLists):
         eachSector.setWhitePercentaje(whitePercentaje)
 
 def createAdjacencyMatrix(sampleLists):
-                        #1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16
-    adjacencyMatrix = [[[0],[1],[0],[0],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]],"1"
-                       [[1],[0],[1],[0],[1],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0],[0]],"2"
-                       [[0],[1],[0],[1],[0],[1],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0]],"3"
-                       [[0],[0],[1],[0],[0],[0],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0]],"4"
-                       [[1],[1],[0],[0],[0],[1],[0],[0],[1],[1],[0],[0],[0],[0],[0],[0]],"5"
-                       [[1],[1],[1],[0],[1],[0],[1],[0],[1],[1],[1],[0],[0],[0],[0],[0]],"6"
-                       [[0],[1],[1],[1],[0],[1],[0],[1],[0],[1],[1],[1],[0],[0],[0],[0]],"7"
-                       [[0],[0],[1],[1],[0],[0],[1],[0],[0],[0],[1],[1],[0],[0],[0],[0]],"8"
-                       [[0],[0],[0],[0],[1],[1],[0],[0],[0],[1],[0],[0],[1],[1],[0],[0]],"9"
-                       [[0],[0],[0],[0],[1],[1],[1],[0],[1],[0],[1],[0],[1],[1],[1],[0]],"10"
-                       [[0],[0],[0],[0],[0],[1],[1],[1],[0],[1],[0],[1],[0],[1],[1],[1]],"11"
-                       [[0],[0],[0],[0],[0],[0],[1],[1],[0],[0],[1],[0],[0],[0],[1],[1]],"12"
-                       [[0],[0],[0],[0],[0],[0],[0],[0],[1],[1],[0],[0],[0],[1],[0],[0]],"13"
-                       [[0],[0],[0],[0],[0],[0],[0],[0],[1],[1],[1],[0],[1],[0],[1],[0]],"14"
-                       [[0],[0],[0],[0],[0],[0],[0],[0],[0],[1],[1],[1],[0],[1],[0],[1]],"15"
-                       [[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[1],[1],[0],[0],[1],[0]],"16"]
-
-    # for adjaceny in len(sampleLists):
-
+    # horizontalList = []
+    # finalList = []
+    # for sepateBySector in range(0, len(sampleLists)):
+    #     if (sepateBySector + 1) % 4 != 0:
+    #         # horizontalList += [Sector.getCoordinateSamples(sampleLists[sepateBySector])]
+    #         horizontalList += [sepateBySector]
+    #     else:
+    #         # horizontalList += [Sector.getCoordinateSamples(sampleLists[sepateBySector])]
+    #         horizontalList += [sepateBySector]
+    #         finalList += [horizontalList]
+    #         horizontalList = []
+    g = Graph(20)
+    for adjacencyBySector in range(0, len(sampleLists)):
+        for adjacencySectorBySector in range(0, len(sampleLists)):
+            if adjacencyBySector != adjacencySectorBySector:
+                print("Nodo: ", adjacencyBySector, " Valor: ", adjacencySectorBySector)
+                if (adjacencyBySector - 1) == adjacencySectorBySector and (adjacencyBySector) % 4 != 0:
+                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
+                elif (adjacencyBySector + 1) == adjacencySectorBySector and (adjacencyBySector + 1) % 4 != 0:
+                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
+                elif (adjacencyBySector - 3) == adjacencySectorBySector and (adjacencyBySector + 1) % 4 != 0:
+                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
+                elif (adjacencyBySector + 3) == adjacencySectorBySector and (adjacencyBySector) % 4 != 0:
+                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
+                elif (adjacencyBySector - 4) == adjacencySectorBySector:
+                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
+                elif (adjacencyBySector + 4) == adjacencySectorBySector:
+                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
+                elif (adjacencyBySector - 5) == adjacencySectorBySector:
+                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
+                elif (adjacencyBySector + 5) == adjacencySectorBySector:
+                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
+                else:
+                    print("No sirvio")
+        print("---------------------")
+    # g.toString()
+            #1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16
+    # adjacencyMatrix = [[[0],[1],[0],[0],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]],1
+    #                    [[1],[0],[1],[0],[1],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0],[0]],2
+    #                    [[0],[1],[0],[1],[0],[1],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0]],3
+    #                    [[0],[0],[1],[0],[0],[0],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0]],4
+    #                    [[1],[1],[0],[0],[0],[1],[0],[0],[1],[1],[0],[0],[0],[0],[0],[0]],5
+    #                    [[1],[1],[1],[0],[1],[0],[1],[0],[1],[1],[1],[0],[0],[0],[0],[0]],6
+    #                    [[0],[1],[1],[1],[0],[1],[0],[1],[0],[1],[1],[1],[0],[0],[0],[0]],7
+    #                    [[0],[0],[1],[1],[0],[0],[1],[0],[0],[0],[1],[1],[0],[0],[0],[0]],8
+    #                    [[0],[0],[0],[0],[1],[1],[0],[0],[0],[1],[0],[0],[1],[1],[0],[0]],9
+    #                    [[0],[0],[0],[0],[1],[1],[1],[0],[1],[0],[1],[0],[1],[1],[1],[0]],10
+    #                    [[0],[0],[0],[0],[0],[1],[1],[1],[0],[1],[0],[1],[0],[1],[1],[1]],11
+    #                    [[0],[0],[0],[0],[0],[0],[1],[1],[0],[0],[1],[0],[0],[0],[1],[1]],12
+    #                    [[0],[0],[0],[0],[0],[0],[0],[0],[1],[1],[0],[0],[0],[1],[0],[0]],13
+    #                    [[0],[0],[0],[0],[0],[0],[0],[0],[1],[1],[1],[0],[1],[0],[1],[0]],14
+    #                    [[0],[0],[0],[0],[0],[0],[0],[0],[0],[1],[1],[1],[0],[1],[0],[1]],15
+    #                    [[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[1],[1],[0],[0],[1],[0]],16]
 
 """
 def estimateWhiteColor(sectorsList):
