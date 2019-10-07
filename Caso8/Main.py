@@ -44,6 +44,11 @@ if __name__ == "__main__" :
     sampleLists = createSample()
     #sampleLists.sort(key=lambda sector: sector.getSectorNumber(), reverse=False)
     print("Size Lista: ", len(sampleLists))
+    for i in range(0, len(sampleLists)):
+        print("Sector ", i + 1)
+        print(Sector.getCoordinateSamples(sampleLists[i]))
+        print("//////////////")
+        
     createColorsSamples(image, sampleLists)
     polygonCreation(sampleLists)
     archivo = open("View.html", "w")
