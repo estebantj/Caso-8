@@ -12,7 +12,7 @@ def polygonCreation(pSectorsList):
         adjacencyListPosition += [listIndex - 4]
         adjacencyListPosition += [listIndex + 4]
         adjacencyListPosition = [position for position in adjacencyListPosition if position in range(0, len(pSectorsList)-1)]
-        print(adjacencyListPosition)
+        # print(adjacencyListPosition)
 
 
 def createSVG(pointsList, pColor):

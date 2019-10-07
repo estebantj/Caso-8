@@ -2,11 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="084817ba-afce-4f2a-accb-2a4646440b6b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Caso8/View.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Caso8/AdjacencyMatrix.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Caso8/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caso8/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Caso8/Polygons.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caso8/Polygons.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Caso8/Sampling.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caso8/Sampling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Caso8/Sector.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caso8/Sector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Caso8/View.html" beforeDir="false" afterPath="$PROJECT_DIR$/Caso8/View.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +17,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -26,13 +27,14 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Caso8/Polygons.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/Caso8/AdjacencyMatrix.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Caso8/Sampling.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Caso8/Colors.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Caso8/Constants.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Caso8/HTMLImage.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/Caso8/Sector.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Caso8/Main.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Caso8/Index.html" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/Caso8/Sector.py" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
