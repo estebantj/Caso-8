@@ -19,7 +19,8 @@ def polygonCreation(pSectorsList, adjMatrix):
                     colorSample = sectorWithLowestWhitePercentage.getRandomColorSample()
                     polygonPoints += [str(colorSample.getXCoordinate) + "," + str(colorSample.getYCoordinate())]
                     print(adjacencyList)
-                adjacencyList.remove(sectorWithLowestWhitePercentage.getSectorNumber() - 1)
+                if(sectorWithLowestWhitePercentage.getSectorNumber() - 1) in adjacencyList:
+                    adjacencyList.remove(sectorWithLowestWhitePercentage.getSectorNumber() - 1)
 
             if len(polygonPoints) >= 3:
                 htmlPolygon = createHtmlPolygon(polygonPoints, colorSample)
