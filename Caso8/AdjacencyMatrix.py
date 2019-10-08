@@ -33,6 +33,6 @@ class Graph(object):
     def getAllAdjacencies(self, elementPosition):
         adjacenciesPositions = []
         for column, value in enumerate(self.adjMatrix[elementPosition]):
-            if (value > 0):
+            if value > 0:
                 adjacenciesPositions += [column]
         return adjacenciesPositions

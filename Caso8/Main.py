@@ -9,7 +9,7 @@ def openImage(pPath):
     return newImage
 
 def createSectors():
-    image = openImage(Constants.IMAGES[0])
+    image = openImage(Constants.IMAGES[1])
     imageWidth, imageHeight = image.size
     sectorsX = []
     sectorsY = []
@@ -27,17 +27,18 @@ def createSectors():
     for coordinateNumber in range(0, Constants.NUMBERS_OF_LINES):
         x = sectorsX[coordinateNumber]
         y = sectorsY[coordinateNumber]
+        htmlLine = '<line x1="' + str(x) + '" y1="0" x2="' + str(x) + '" y2="' + str(imageHeight) + '" stroke= '"black"' /> \n';
+        Constants.HTMLFILE.write(htmlLine);
+        htmlLine = '<line x1="0" y1="' + str(y)+ '" x2="' + str(imageWidth) + '" y2="' + str(y) + '" stroke= '"black"' /> \n';
+        Constants.HTMLFILE.write(htmlLine);
         imageForDrawing.line([(x, 0), (x, imageHeight)], fill="red", width=1)
         imageForDrawing.line([(0, y), (imageWidth, y)], fill="red", width=1)
 
     image.show()
 
-    print(sectorsX)
-    print(sectorsY)
 
 if __name__ == "__main__" :
-    image = openImage(Constants.IMAGES[0])
-    # createSectors()
+    image = openImage(Constants.IMAGES[1])
     sampleLists = createSample()
     # sampleLists.sort(key=lambda sector: sector.getSectorNumber(), reverse=False)
     # print("Size Lista: ", len(sampleLists))
@@ -52,6 +53,7 @@ if __name__ == "__main__" :
     Constants.HTMLFILE = open("View.html", "w")
     Constants.HTMLFILE.write(Constants.HTML1)
 
+    createSectors()
     polygonCreation(sampleLists, adjacencyGraph)
 
     # Create svg
