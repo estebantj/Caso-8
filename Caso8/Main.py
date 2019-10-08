@@ -3,12 +3,10 @@ from Sampling import *
 from Polygons import *
 from PIL import Image, ImageDraw
 
-
 def openImage(pPath):
     newImage = Image.open(pPath)
     Constants.IMAGESIZE = newImage.size
     return newImage
-
 
 def createSectors():
     image = openImage(Constants.IMAGES[0])
@@ -37,12 +35,11 @@ def createSectors():
     print(sectorsX)
     print(sectorsY)
 
-
 if __name__ == "__main__" :
     image = openImage(Constants.IMAGES[0])
-    #createSectors()
+    # createSectors()
     sampleLists = createSample()
-    #sampleLists.sort(key=lambda sector: sector.getSectorNumber(), reverse=False)
+    # sampleLists.sort(key=lambda sector: sector.getSectorNumber(), reverse=False)
     # print("Size Lista: ", len(sampleLists))
     # for i in range(0, len(sampleLists)):
     #     print("Sector ", i + 1)
@@ -50,15 +47,20 @@ if __name__ == "__main__" :
     #     print("//////////////")
 
     createColorsSamples(image, sampleLists)
-    polygonCreation(sampleLists)
-    archivo = open("View.html", "w")
-    archivo.write(Constants.HTML1)
-    # Create svg
-    pointsList = ["220,10", "300,210", "170,250", "123,234"]
-    svg = createSVG(pointsList, sampleLists[0].getColorSample()[0])
-    archivo.write(svg)
-    archivo.write(Constants.HTML2)
-    archivo.close()
+    adjacencyGraph = createAdjacencyMatrix(sampleLists)
+    # Una vez que se tienen las muestras y la matriz de adyacencias se crean los pogigonos
+    Constants.HTMLFILE = open("View.html", "w")
+    Constants.HTMLFILE.write(Constants.HTML1)
 
-    createAdjacencyMatrix(sampleLists)
+    polygonCreation(sampleLists, adjacencyGraph)
+
+    # Create svg
+    # pointsList = ["220,10", "300,210", "170,250", "123,234"]
+    # htmlPolygon = createHtmlPolygon(pointsList, sampleLists[0].getColorSample()[0])
+    # archivo.write(htmlPolygon)
+
+    Constants.HTMLFILE.write(Constants.HTML2)
+    Constants.HTMLFILE.close()
+
+    print(adjacencyGraph.containsEdge(sampleLists[5].getSectorNumber() - 1, sampleLists[0].getSectorNumber() - 1))
     print("Final")

@@ -29,3 +29,10 @@ class Graph(object):
         for row in self.adjMatrix:
             print("[", count, "]: ", row)
             count += 1
+
+    def getAllAdjacencies(self, elementPosition):
+        adjacenciesPositions = []
+        for column, value in enumerate(self.adjMatrix[elementPosition]):
+            if (value > 0):
+                adjacenciesPositions += [column]
+        return adjacenciesPositions

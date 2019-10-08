@@ -47,28 +47,18 @@ def createColorsSamples(image, sampleLists):
             except IndexError:
                 print("BIG ASS ERROR")
                 print((eachCoordinateSample[0], eachCoordinateSample[1]))
-            sampleColor = Color(r, g, b)
+            sampleColor = Color(r, g, b, eachCoordinateSample[0], eachCoordinateSample[1])
             if sampleColor.isWhite():
-                whiteSamples +=1
+                whiteSamples += 1
             else:
                 nonWhiteSamples += 1
             colorsList += [sampleColor]
         eachSector.setColorSamples(colorsList)
+        eachSector.separateColorsSamples()
         whitePercentaje = (whiteSamples * 100) / Constants.NUMBERS_OF_SAMPLES_PER_SECTOR
         eachSector.setWhitePercentaje(whitePercentaje)
 
 def createAdjacencyMatrix(sampleLists):
-    # horizontalList = []
-    # finalList = []
-    # for sepateBySector in range(0, len(sampleLists)):
-    #     if (sepateBySector + 1) % 4 != 0:
-    #         # horizontalList += [Sector.getCoordinateSamples(sampleLists[sepateBySector])]
-    #         horizontalList += [sepateBySector]
-    #     else:
-    #         # horizontalList += [Sector.getCoordinateSamples(sampleLists[sepateBySector])]
-    #         horizontalList += [sepateBySector]
-    #         finalList += [horizontalList]
-    #         horizontalList = []
     g = Graph(len(sampleLists))
     for adjacencyBySector in range(0, len(sampleLists)):
         for adjacencySectorBySector in range(0, len(sampleLists)):
@@ -90,11 +80,9 @@ def createAdjacencyMatrix(sampleLists):
                     g.addEdge(adjacencyBySector, adjacencySectorBySector)
                 elif (adjacencyBySector + 5) == adjacencySectorBySector:
                     g.addEdge(adjacencyBySector, adjacencySectorBySector)
-                # else:
-                #     print("No sirvio")
-        # print("---------------------")
-    g.toString()
-            #1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16
+    # g.toString()
+    return g
+    # 1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16
     # adjacencyMatrix = [[[0],[1],[0],[0],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]],1
     #                    [[1],[0],[1],[0],[1],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0],[0]],2
     #                    [[0],[1],[0],[1],[0],[1],[1],[1],[0],[0],[0],[0],[0],[0],[0],[0]],3
@@ -111,18 +99,3 @@ def createAdjacencyMatrix(sampleLists):
     #                    [[0],[0],[0],[0],[0],[0],[0],[0],[1],[1],[1],[0],[1],[0],[1],[0]],14
     #                    [[0],[0],[0],[0],[0],[0],[0],[0],[0],[1],[1],[1],[0],[1],[0],[1]],15
     #                    [[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[1],[1],[0],[0],[1],[0]],16]
-
-"""
-def estimateWhiteColor(sectorsList):
-    for sector in sectorsList:
-        whiteSamples = 0
-        nonWhiteSamples = 0
-        for color in sector.getColorSample():
-            if color.isWhite():
-                whiteSamples += 1
-            else:
-                nonWhiteSamples += 1
-        whitePercentaje = (whiteSamples * 100) / Constants.NUMBERS_OF_SAMPLES_PER_SECTOR
-        sector.setWhitePercentaje(whitePercentaje)
-        print("Sector white percentaje: ", whitePercentaje)
-"""

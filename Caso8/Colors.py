@@ -4,10 +4,12 @@
 
 
 class Color:
-    def __init__(self, pRed, pGreen, pBlue):
+    def __init__(self, pRed, pGreen, pBlue, pXCoordinate, pYCoordinate):
         self.__red = pRed
         self.__green = pGreen
         self.__blue = pBlue
+        self.__xCoordinate = pXCoordinate
+        self.__yCoordinate = pYCoordinate
 
     def isWhite(self):
         return self.__red == 255 and self.__green == 255 and self.__blue == 255
@@ -23,3 +25,9 @@ class Color:
 
     def getBlue(self):
         return self.__blue
+
+    def getXCoordinate(self):
+        return self.__xCoordinate
+
+    def getYCoordinate(self):
+        return self.__yCoordinate
