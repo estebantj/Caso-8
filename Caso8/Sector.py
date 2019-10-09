@@ -5,7 +5,6 @@ from Colors import Color
 class Sector:
     def __init__(self):
         self.__possibleCoordinates = []
-        self.__colorsSamples = []
         self.__nonWhiteSamples = []
         self.__sectorNumber = 0
         self.__whitePercentage = 0
@@ -17,13 +16,7 @@ class Sector:
         self.__quantityOfNonWhiteSamples = 0
         # self.__adjacency = 0
 
-    def separateColorsSamples(self):
-        for color in self.__colorsSamples:
-            if not color.isWhite():
-                self.__nonWhiteSamples += [color]
-
     def addColorSample(self, pColorSample):
-        self.__colorsSamples += [pColorSample]
         if pColorSample.isWhite():
             self.__quantityOfWhiteSamples += 1
         else:
@@ -66,9 +59,6 @@ class Sector:
     def getRandomColorSample(self):
         return self.__nonWhiteSamples[random.randint(0, len(self.__nonWhiteSamples) - 1)]
 
-    def getSectorProbability(self):
-        return self.__sectorProbability
-
     def getLenOfPossibleCoordinates(self):
         return len(self.__possibleCoordinates)
 
@@ -95,6 +85,9 @@ class Sector:
 
     def deleteCoordinateByIndex(self, pCoordinateIndex):
         self.__possibleCoordinates.pop(pCoordinateIndex)
+
+    def getSectorProbability(self):
+        return self.__sectorProbability
 
     def reduceSectorProbability(self, pMinus):
         self.__sectorProbability -= pMinus

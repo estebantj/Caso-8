@@ -38,7 +38,7 @@ def createSectorsLineDivision():
 
 
 if __name__ == "__main__" :
-    image = openImage(Constants.IMAGES[1])
+    image = openImage(Constants.IMAGES[2])
     sampleLists = createSectors()
     createColorsSamples(image, sampleLists)
     print()
