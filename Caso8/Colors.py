@@ -12,7 +12,7 @@ class Color:
         self.__yCoordinate = pYCoordinate
 
     def isWhite(self):
-        return self.__red == 255 and self.__green == 255 and self.__blue == 255
+        return self.__red in range(250,256) and self.__green in range(250, 256) and self.__blue in range(250,256)
 
     def __str__(self):
         return "R: "+str(self.__red)+" G: "+str(self.__green)+" B: "+str(self.__blue)
