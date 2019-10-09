@@ -32,7 +32,7 @@ def polygonCreation(pSectorsList, adjMatrix):
     for sectorIndex, sector in enumerate(pSectorsList):
         if sector.getWhitePercentage() != 100:
             polygonPoints = []
-            adjacencyList = adjMatrix.getAllAdjacencies(sectorIndex)
+            adjacencyList = adjMatrix.getAllAdjacency(sectorIndex)
             colorSample = sector.getRandomColorSample()
             polygonPoints += [str(colorSample.getXCoordinate()) + "," + str(colorSample.getYCoordinate())]
 
@@ -48,6 +48,7 @@ def polygonCreation(pSectorsList, adjMatrix):
                 Constants.HTMLFILE.write(htmlPolygon)
         print(sector.getSectorNumber())
     """
+
 
 def createHtmlPolygon(pointsList, pColor):
     colorRed = pColor.getRed()

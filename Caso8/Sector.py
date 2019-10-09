@@ -3,13 +3,18 @@ from Colors import Color
 
 
 class Sector:
-    def __init__(self, pCoodinatesSamples):
-        self.__coordinatesSamples = pCoodinatesSamples
+    def __init__(self):
+        self.__possibleCoordinates = []
         self.__colorsSamples = []
         self.__nonWhiteSamples = []
         self.__sectorNumber = 0
-        self.__whitePercentaje = 0
-        self.__nonWhitePercentaje = 0
+        self.__whitePercentage = 0
+        self.__nonWhitePercentage = 0
+        self.__xRange = []
+        self.__yRange = []
+        self.__sectorProbability = 1
+        self.__quantityOfWhiteSamples = 0
+        self.__quantityOfNonWhiteSamples = 0
         # self.__adjacency = 0
 
     def separateColorsSamples(self):
@@ -17,9 +22,21 @@ class Sector:
             if not color.isWhite():
                 self.__nonWhiteSamples += [color]
 
+    def addColorSample(self, pColorSample):
+        self.__colorsSamples += [pColorSample]
+        if pColorSample.isWhite():
+            self.__quantityOfWhiteSamples += 1
+        else:
+            self.__quantityOfNonWhiteSamples += 1
+            self.__nonWhiteSamples += [pColorSample]
+
+    def createPossibleCoordinates(self):
+        for xCoordinate in range(self.__xRange[0], self.__xRange[1]):
+            for yCoordinate in range(self.__yRange[0], self.__yRange[1]):
+                self.__possibleCoordinates += [[xCoordinate, yCoordinate]]
+
     def sortNonWhiteColoSamplesByXCoordinate(self):
         self.__nonWhiteSamples.sort(key=lambda x: x.getXCoordinate())
-
 
     def sortNonWhiteColoSamplesByYCoordinate(self):
         self.__nonWhiteSamples.sort(key=lambda x: x.getYCoordinate())
@@ -33,12 +50,12 @@ class Sector:
     def getSectorNumber(self):
         return self.__sectorNumber
 
-    def setWhitePercentaje(self, pWhitePercentaje):
-        self.__whitePercentaje = pWhitePercentaje
-        self.__nonWhitePercentaje = 100 - pWhitePercentaje
+    def setWhitePercentage(self):
+        self.__whitePercentage = (self.__quantityOfWhiteSamples * 100) / (self.__quantityOfWhiteSamples + self.__quantityOfNonWhiteSamples)
+        self.__nonWhitePercentage = 100 - self.__whitePercentage
 
     def getWhitePercentage(self):
-        return self.__whitePercentaje
+        return self.__whitePercentage
 
     def getColorSamples(self):
         return self.__colorsSamples
@@ -46,11 +63,14 @@ class Sector:
     def getNonWhiteSamples(self):
         return self.__nonWhiteSamples
 
-    def getCoordinateSamples(self):
-        return self.__coordinatesSamples
-
     def getRandomColorSample(self):
         return self.__nonWhiteSamples[random.randint(0, len(self.__nonWhiteSamples) - 1)]
+
+    def getSectorProbability(self):
+        return self.__sectorProbability
+
+    def getLenOfPossibleCoordinates(self):
+        return len(self.__possibleCoordinates)
 
     def getColorPromedy(self):
         r, g, b = 0, 0, 0
@@ -62,6 +82,22 @@ class Sector:
         g = g / len(self.__nonWhiteSamples)
         b = b / len(self.__nonWhiteSamples)
         return Color(r, g, b, 0 ,0)
+
+    def setXRange(self, pXRange):
+        self.__xRange = pXRange
+
+    def setYRange(self, pYRange):
+        self.__yRange = pYRange
+
+    def getRandomCoordinate(self):
+        randomCoordinateIndex = random.randint(0, len(self.__possibleCoordinates) - 1)
+        return randomCoordinateIndex, self.__possibleCoordinates[randomCoordinateIndex]
+
+    def deleteCoordinateByIndex(self, pCoordinateIndex):
+        self.__possibleCoordinates.pop(pCoordinateIndex)
+
+    def reduceSectorProbability(self, pMinus):
+        self.__sectorProbability -= pMinus
 
     def __str__(self):
         return "Sector Number: " + str(self.__sectorNumber)
