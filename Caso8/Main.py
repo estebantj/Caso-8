@@ -36,7 +36,6 @@ def createSectorsLineDivision():
 
     #image.show()
 
-
 if __name__ == "__main__" :
     image = openImage(Constants.IMAGES[2])
     sampleLists = createSectors()
