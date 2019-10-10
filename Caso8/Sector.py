@@ -67,7 +67,7 @@ class Sector:
             r += color.getRed()
             g += color.getGreen()
             b += color.getBlue()
-        r = r/len(self.__nonWhiteSamples)
+        r = r / len(self.__nonWhiteSamples)
         g = g / len(self.__nonWhiteSamples)
         b = b / len(self.__nonWhiteSamples)
         return Color(r, g, b, 0 ,0)

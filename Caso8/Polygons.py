@@ -1,6 +1,5 @@
 import Constants
 from Sector import getSectorWithTheLowestPercentageOfWhite
-from Shapes import polygonShapes
 
 class Polygon:
     def __init__(self):
@@ -27,7 +26,6 @@ def polygonCreation(pSectorsList, adjMatrix):
             averageColor = sector.getColorPromedy()
             htmlPolygon = createHtmlPolygon(polygonPoints, averageColor)
             Constants.HTMLFILE.write(htmlPolygon)
-            polygonShapes(colorSampleAtTop, colorSampleAtLeft, colorSampleAtBottom, colorSampleAtRight)
 
 def createHtmlPolygon(pointsList, pColor):
     colorRed = pColor.getRed()
