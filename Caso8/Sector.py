@@ -1,7 +1,6 @@
 import random
 from Colors import Color
 
-
 class Sector:
     def __init__(self):
         self.__possibleCoordinates = []
@@ -68,7 +67,7 @@ class Sector:
             r += color.getRed()
             g += color.getGreen()
             b += color.getBlue()
-        r = r/len(self.__nonWhiteSamples)
+        r = r / len(self.__nonWhiteSamples)
         g = g / len(self.__nonWhiteSamples)
         b = b / len(self.__nonWhiteSamples)
         return Color(r, g, b, 0 ,0)
@@ -94,7 +93,6 @@ class Sector:
 
     def __str__(self):
         return "Sector Number: " + str(self.__sectorNumber)
-
 
 def getSectorWithTheLowestPercentageOfWhite(pSectorsList, pAdjacencyList):
     sectorWithTheLowestWhitePercentage = pSectorsList[pAdjacencyList[0]]

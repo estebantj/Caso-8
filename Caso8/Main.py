@@ -1,6 +1,7 @@
 import Constants
 from Sampling import *
 from Polygons import *
+from Population import *
 from PIL import Image, ImageDraw
 
 def openImage(pPath):
@@ -24,40 +25,48 @@ def createSectorsLineDivision():
         sectorsY += [linePixelPositionY]
 
     imageForDrawing = ImageDraw.Draw(image)
-    for coordinateNumber in range(0, Constants.NUMBER_OF_LINES):
-        x = sectorsX[coordinateNumber]
-        y = sectorsY[coordinateNumber]
-        htmlLine = '<line x1="' + str(x) + '" y1="0" x2="' + str(x) + '" y2="' + str(imageHeight) + '" stroke= '"black"' /> \n';
-        Constants.HTMLFILE.write(htmlLine);
-        htmlLine = '<line x1="0" y1="' + str(y)+ '" x2="' + str(imageWidth) + '" y2="' + str(y) + '" stroke= '"black"' /> \n';
-        Constants.HTMLFILE.write(htmlLine);
-        imageForDrawing.line([(x, 0), (x, imageHeight)], fill="red", width=1)
-        imageForDrawing.line([(0, y), (imageWidth, y)], fill="red", width=1)
+    # for coordinateNumber in range(0, Constants.NUMBER_OF_LINES):
+    #     x = sectorsX[coordinateNumber]
+    #     y = sectorsY[coordinateNumber]
+    #     htmlLine = '<line x1="' + str(x) + '" y1="0" x2="' + str(x) + '" y2="' + str(imageHeight) + '" stroke= '"black"' /> \n';
+    #     Constants.HTMLFILE.write(htmlLine);
+    #     htmlLine = '<line x1="0" y1="' + str(y)+ '" x2="' + str(imageWidth) + '" y2="' + str(y) + '" stroke= '"black"' /> \n';
+    #     Constants.HTMLFILE.write(htmlLine);
+    #     imageForDrawing.line([(x, 0), (x, imageHeight)], fill="red", width=1)
+    #     imageForDrawing.line([(0, y), (imageWidth, y)], fill="red", width=1)
 
-    #image.show()
-
+    # image.show()
 
 if __name__ == "__main__" :
-    image = openImage(Constants.IMAGES[2])
+    # Create the object Image
+    image = openImage(Constants.IMAGES[0])
+    image.show()
+
+    # Creating samples and define colors
     sampleLists = createSectors()
     createColorsSamples(image, sampleLists)
-    print()
+    addImageLines(image)
 
-    adjacencyGraph = createAdjacencyMatrix(sampleLists)
-    # Una vez que se tienen las muestras y la matriz de adyacencias se crean los pogigonos
+    # Creation of Adjacency Table
+    # adjacencyGraph = createAdjacencyMatrix(sampleLists)
+
+    # Creation of the header of the HTML
     Constants.HTMLFILE = open("View.html", "w")
     Constants.HTMLFILE.write(Constants.HTML1)
 
-    createSectorsLineDivision()
+    # Lines that divide by sector the image
+    # createSectorsLineDivision()
 
+    # Creation of sectors and polygons
     createSectors()
     polygonCreation(sampleLists, adjacencyGraph)
 
-    # Create svg
+    # Create svg by default - TEST
     # pointsList = ["220,10", "300,210", "170,250", "123,234"]
     # htmlPolygon = createHtmlPolygon(pointsList, sampleLists[0].getColorSample()[0])
     # archivo.write(htmlPolygon)
 
+    # Completing the HTML File with the polygons from polygonCreation
     Constants.HTMLFILE.write(Constants.HTML2)
     Constants.HTMLFILE.close()
 

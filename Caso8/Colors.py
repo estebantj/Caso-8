@@ -2,7 +2,6 @@
     Clase utilizada para guardar los colores tomados aleatoriamente de la imagen
 """
 
-
 class Color:
     def __init__(self, pRed, pGreen, pBlue, pXCoordinate, pYCoordinate):
         self.__red = pRed
