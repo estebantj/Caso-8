@@ -1,6 +1,7 @@
 import random
 from Colors import Color
 
+
 class Sector:
     def __init__(self):
         self.__possibleCoordinates = []
@@ -13,7 +14,6 @@ class Sector:
         self.__sectorProbability = 1
         self.__quantityOfWhiteSamples = 0
         self.__quantityOfNonWhiteSamples = 0
-        # self.__adjacency = 0
 
     def addColorSample(self, pColorSample):
         if pColorSample.isWhite():
@@ -27,14 +27,14 @@ class Sector:
             for yCoordinate in range(self.__yRange[0], self.__yRange[1]):
                 self.__possibleCoordinates += [[xCoordinate, yCoordinate]]
 
-    def sortNonWhiteColoSamplesByXCoordinate(self):
+    def sortNonWhiteColorsSamplesByXCoordinate(self):
         self.__nonWhiteSamples.sort(key=lambda x: x.getXCoordinate())
 
-    def sortNonWhiteColoSamplesByYCoordinate(self):
+    def sortNonWhiteColorsSamplesByYCoordinate(self):
         self.__nonWhiteSamples.sort(key=lambda x: x.getYCoordinate())
 
-    def setColorSamples(self, pColorSamples):
-        self.__colorsSamples = pColorSamples
+    def sortNonWhiteColorsSamplesByBothCoordinates(self):
+        self.__nonWhiteSamples.sort(key=lambda x: x.getYCoordinate() + x.getXCoordinate())
 
     def setSectorNumber(self, pSectorNumber):
         self.__sectorNumber = pSectorNumber
@@ -49,19 +49,16 @@ class Sector:
     def getWhitePercentage(self):
         return self.__whitePercentage
 
-    def getColorSamples(self):
-        return self.__colorsSamples
-
     def getNonWhiteSamples(self):
         return self.__nonWhiteSamples
 
     def getRandomColorSample(self):
         return self.__nonWhiteSamples[random.randint(0, len(self.__nonWhiteSamples) - 1)]
 
-    def getLenOfPossibleCoordinates(self):
-        return len(self.__possibleCoordinates)
+    def getLenOfNonWhiteSamples(self):
+        return len(self.__nonWhiteSamples)
 
-    def getColorPromedy(self):
+    def getAverageColor(self):
         r, g, b = 0, 0, 0
         for color in self.__nonWhiteSamples:
             r += color.getRed()
@@ -70,7 +67,7 @@ class Sector:
         r = r / len(self.__nonWhiteSamples)
         g = g / len(self.__nonWhiteSamples)
         b = b / len(self.__nonWhiteSamples)
-        return Color(r, g, b, 0 ,0)
+        return Color(r, g, b, 0, 0)
 
     def setXRange(self, pXRange):
         self.__xRange = pXRange
@@ -93,6 +90,7 @@ class Sector:
 
     def __str__(self):
         return "Sector Number: " + str(self.__sectorNumber)
+
 
 def getSectorWithTheLowestPercentageOfWhite(pSectorsList, pAdjacencyList):
     sectorWithTheLowestWhitePercentage = pSectorsList[pAdjacencyList[0]]
