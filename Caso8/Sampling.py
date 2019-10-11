@@ -17,18 +17,15 @@ def createSectors():
             pointX1 = pointY1
             pointY1 = sectorDivision * verticalDisplacement
             newSector = Sector()
-            if pointY1 == Constants.IMAGESIZE[0]:
-                pointY1 -= 1
-            if pointY2 == Constants.IMAGESIZE[1]:
-                pointY2 -= 1
-            newSector.setXRange([pointX1, pointY1])
-            newSector.setYRange([pointX2, pointY2])
+            newSector.setXRange([pointX1, pointY1 - 1])
+            newSector.setYRange([pointX2, pointY2 - 1])
             newSector.setSectorNumber(sectorNumber)
             newSector.createPossibleCoordinates()
             sampleOfSectors += [newSector]
             sectorNumber += 1
         pointY1 = 0
     return sampleOfSectors
+
 
 def createColorsSamples(pImage, pSampleList):
     rgbImage = pImage.convert('RGB')
@@ -60,31 +57,6 @@ def createColorsSamples(pImage, pSampleList):
     for eachSector in pSampleList:
         eachSector.setWhitePercentage()
 
-"""
-def createColorsSamples(image, sampleLists):
-    rgb_im = image.convert('RGB')
-    for eachSector in sampleLists:
-        colorsList = []
-        whiteSamples = 0
-        nonWhiteSamples = 0
-        for eachCoordinateSample in eachSector.getCoordinateSamples():
-            r, g, b = 0, 0, 0
-            try:
-                r, g, b = rgb_im.getpixel((eachCoordinateSample[0], eachCoordinateSample[1]))
-            except IndexError:
-                print("BIG ASS ERROR")
-                print((eachCoordinateSample[0], eachCoordinateSample[1]))
-            sampleColor = Color(r, g, b, eachCoordinateSample[0], eachCoordinateSample[1])
-            if sampleColor.isWhite():
-                whiteSamples += 1
-            else:
-                nonWhiteSamples += 1
-            colorsList += [sampleColor]
-        eachSector.setColorSamples(colorsList)
-        eachSector.separateColorsSamples()
-        whitePercentaje = (whiteSamples * 100) / Constants.NUMBERS_OF_SAMPLES_PER_SECTOR
-        eachSector.setWhitePercentaje(whitePercentaje)
-"""
 
 def createAdjacencyMatrix(sampleLists):
     g = Graph(len(sampleLists))

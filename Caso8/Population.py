@@ -45,6 +45,7 @@ def addImageLines(image):
             imageForDrawing.line([(sectorDivision * moveRight, linesPerPixel), (sectorDivision * (moveRight + 1), linesPerPixel)], fill = (r,g,b), width = 1)
     image.show()
 
+
 def doColorPromedy(colorList):
     r = g = b = 0
     for colorPerList in (colorList):
