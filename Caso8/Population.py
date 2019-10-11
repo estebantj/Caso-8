@@ -35,8 +35,9 @@ def addImageLines(image):
 
     for linesPerPixel in range(0, xPoint):
         # linesList += [[0, linesPerPixel],[xPoint, linesPerPixel]]
-        colorList = []
+
         for moveRight in range(0, Constants.NUMBER_OF_LINES + 1):
+            colorList = []
             for pixelsPerLine in range(sectorDivision * moveRight, sectorDivision * (moveRight + 1)):
                 r, g, b = rgbImage.getpixel((pixelsPerLine, linesPerPixel))
                 newColor = Color(r, g, b, pixelsPerLine, linesPerPixel)
