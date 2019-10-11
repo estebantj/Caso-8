@@ -75,6 +75,18 @@ class Sector:
     def setYRange(self, pYRange):
         self.__yRange = pYRange
 
+    def getYRange(self):
+        return self.__yRange
+
+    def searchPointByYCoordinate(self, pY):
+        for color in self.__nonWhiteSamples:
+            if color.getYCoordinate() == pY:
+                return color
+        return None
+
+    def reverseColorsOrder(self):
+        self.__nonWhiteSamples.reverse()
+
     def getRandomCoordinate(self):
         randomCoordinateIndex = random.randint(0, len(self.__possibleCoordinates) - 1)
         return randomCoordinateIndex, self.__possibleCoordinates[randomCoordinateIndex]

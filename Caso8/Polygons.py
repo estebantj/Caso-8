@@ -32,24 +32,25 @@ def polygonCreation2(pSectorsList):
     for sectorIndex, sector in enumerate(pSectorsList):
         if sector.getWhitePercentage() != 100:
             polygonPoints = []
-            sector.sortNonWhiteColorsSamplesByXCoordinate()
-            colorSampleAtLeft = sector.getNonWhiteSamples()[0]
-            colorSampleAtRight = sector.getNonWhiteSamples()[sector.getLenOfNonWhiteSamples() - 1]
-            sector.sortNonWhiteColorsSamplesByYCoordinate()
-            colorSampleAtTop = sector.getNonWhiteSamples()[0]
-            colorSampleAtBottom = sector.getNonWhiteSamples()[sector.getLenOfNonWhiteSamples() - 1]
-
             sector.sortNonWhiteColorsSamplesByBothCoordinates()
             colorSampleAtUpperLeftCorner = sector.getNonWhiteSamples()[0]
             colorSampleAtLowerRightCorner = sector.getNonWhiteSamples()[sector.getLenOfNonWhiteSamples() - 1]
-
-            polygonPoints += [str(colorSampleAtTop.getXCoordinate()) + "," + str(colorSampleAtTop.getYCoordinate())]
             polygonPoints += [str(colorSampleAtUpperLeftCorner.getXCoordinate()) + "," + str(colorSampleAtUpperLeftCorner.getYCoordinate())]
-            polygonPoints += [str(colorSampleAtLeft.getXCoordinate()) + "," + str(colorSampleAtLeft.getYCoordinate())]
 
-            polygonPoints += [str(colorSampleAtBottom.getXCoordinate()) + "," + str(colorSampleAtBottom.getYCoordinate())]
+            sectorYRange = sector.getYRange()
+            sector.sortNonWhiteColorsSamplesByYCoordinate()
+            lineIncrease = 10
+            for yCoordinate in range(sectorYRange[0], sectorYRange[1], lineIncrease):
+                point = sector.searchPointByYCoordinate(yCoordinate)
+                if point is not None:
+                    polygonPoints += [str(point.getXCoordinate()) + "," + str(point.getYCoordinate())]
             polygonPoints += [str(colorSampleAtLowerRightCorner.getXCoordinate()) + "," + str(colorSampleAtLowerRightCorner.getYCoordinate())]
-            polygonPoints += [str(colorSampleAtRight.getXCoordinate()) + "," + str(colorSampleAtRight.getYCoordinate())]
+
+            sector.reverseColorsOrder()
+            for yCoordinate in range(sectorYRange[1], sectorYRange[0], -lineIncrease):
+                point = sector.searchPointByYCoordinate(yCoordinate)
+                if point is not None:
+                    polygonPoints += [str(point.getXCoordinate()) + "," + str(point.getYCoordinate())]
 
             averageColor = sector.getAverageColor()
             htmlPolygon = createHtmlPolygon(polygonPoints, averageColor)

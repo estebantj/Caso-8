@@ -39,7 +39,7 @@ def createSectorsLineDivision():
 
 if __name__ == "__main__" :
     # Create the object Image
-    image = openImage(Constants.IMAGES[2])
+    image = openImage(Constants.IMAGES[0])
 
     # Creating samples and define colors
     sampleLists = createSectors()
