@@ -9,8 +9,7 @@ def openImage(pPath):
     Constants.IMAGESIZE = newImage.size
     return newImage
 
-def createSectorsLineDivision():
-    image = openImage(Constants.IMAGES[1])
+def createSectorsLineDivision(pImage):
     imageWidth, imageHeight = image.size
     sectorsX = []
     sectorsY = []
@@ -24,7 +23,7 @@ def createSectorsLineDivision():
         linePixelPositionY += numberOfPixelsPerSectorY
         sectorsY += [linePixelPositionY]
 
-    imageForDrawing = ImageDraw.Draw(image)
+    imageForDrawing = ImageDraw.Draw(pImage)
     for coordinateNumber in range(0, Constants.NUMBER_OF_LINES):
         x = sectorsX[coordinateNumber]
         y = sectorsY[coordinateNumber]
@@ -45,18 +44,18 @@ if __name__ == "__main__" :
     sampleLists = createSectors()
     createColorsSamples(image, sampleLists)
 
-    #addImageLines(image)
+    addImageLines(image)
 
     # Creation of the header of the HTML
     Constants.HTMLFILE = open("View.html", "w")
     Constants.HTMLFILE.write(Constants.HTML1)
 
     # Lines that divide by sector the image
-    createSectorsLineDivision()
+    createSectorsLineDivision(image)
 
     # Creation of sectors and polygons
     createSectors()
-    polygonCreation2(sampleLists)
+    polygonCreation(sampleLists)
 
     # Completing the HTML File with the polygons from polygonCreation
     Constants.HTMLFILE.write(Constants.HTML2)

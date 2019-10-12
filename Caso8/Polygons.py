@@ -5,7 +5,6 @@ class Polygon:
     def __init__(self):
         self.__pointsList = []
 
-
 def polygonCreation(pSectorsList):
     for sectorIndex, sector in enumerate(pSectorsList):
         if sector.getWhitePercentage() != 100:
