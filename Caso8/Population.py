@@ -84,20 +84,22 @@ def countPopulation(pPopulation):
 
 def createChromosomeRepresentation(pSectorList):
     for sector in pSectorList:
-        if sector.getSectorNumber() == 18:
-            print()
         numberOfCombinations = 2 ** Constants.AMOUNT_OF_BITS
         populationPerRange = countPopulation(sector.getPopulation())
         totalPopulation = sum(populationPerRange)
         endOfLastRange = 0
         ranges = []
         for amountOfPopulationInRange in populationPerRange:
-            percentageForDistribution = amountOfPopulationInRange / totalPopulation
-            numberOfCombinationsForRange = numberOfCombinations * percentageForDistribution
-            ranges += [[endOfLastRange, endOfLastRange + numberOfCombinationsForRange - 1]]
-            if numberOfCombinationsForRange != 0:
-                endOfLastRange = numberOfCombinationsForRange
-        print(sector.getSectorNumber(), ranges)
+            if amountOfPopulationInRange > 0:
+                percentageForDistribution = amountOfPopulationInRange / totalPopulation
+                numberOfCombinationsForRange = numberOfCombinations * percentageForDistribution
+                ranges += [[endOfLastRange, int(round(endOfLastRange + numberOfCombinationsForRange - 1))]]
+                if numberOfCombinationsForRange != 0:
+                    endOfLastRange = int(round(endOfLastRange + numberOfCombinationsForRange))
+            else:
+                ranges += [[0, 0]]
+        if sector.getSectorNumber() == 28:
+            print(sector.getSectorNumber(), ranges)
 
 
 def doColorPromedy(colorList):
