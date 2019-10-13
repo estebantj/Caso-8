@@ -89,5 +89,8 @@ class Sector:
     def getPopulation(self):
         return self.__population
 
+    def getSectorNumber(self):
+        return self.__sectorNumber
+
     def __str__(self):
         return "Sector Number: " + str(self.__sectorNumber)

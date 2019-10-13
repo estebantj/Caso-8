@@ -56,29 +56,3 @@ def createColorsSamples(pImage, pSampleList):
                     eachSector.reduceSectorProbability(percentageReduction)
     for eachSector in pSampleList:
         eachSector.setWhitePercentage()
-
-
-def createAdjacencyMatrix(sampleLists):
-    g = Graph(len(sampleLists))
-    for adjacencyBySector in range(0, len(sampleLists)):
-        for adjacencySectorBySector in range(0, len(sampleLists)):
-            if adjacencyBySector != adjacencySectorBySector:
-                # print("Nodo: ", adjacencyBySector, " Valor: ", adjacencySectorBySector)
-                if (adjacencyBySector - 1) == adjacencySectorBySector and (adjacencyBySector) % 4 != 0:
-                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
-                elif (adjacencyBySector + 1) == adjacencySectorBySector and (adjacencyBySector + 1) % 4 != 0:
-                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
-                elif (adjacencyBySector - 3) == adjacencySectorBySector and (adjacencyBySector + 1) % 4 != 0:
-                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
-                elif (adjacencyBySector + 3) == adjacencySectorBySector and (adjacencyBySector) % 4 != 0:
-                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
-                elif (adjacencyBySector - 4) == adjacencySectorBySector:
-                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
-                elif (adjacencyBySector + 4) == adjacencySectorBySector:
-                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
-                elif (adjacencyBySector - 5) == adjacencySectorBySector:
-                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
-                elif (adjacencyBySector + 5) == adjacencySectorBySector:
-                    g.addEdge(adjacencyBySector, adjacencySectorBySector)
-    # g.toString()
-    return g
