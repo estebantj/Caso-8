@@ -46,7 +46,6 @@ def createPopulationPerSector(pSectorList, pImage):
     global listOfLines
     rgbImage = pImage.convert('RGB')
     for sector in pSectorList:
-        amountOfLinesCreated = 0
         for amountOfLines in range(sector.getYRange()[0], sector.getYRange()[1], 2):
             colorList = []
             for pixelsPerLine in range(sector.getXRange()[0], sector.getXRange()[1]):
@@ -58,42 +57,11 @@ def createPopulationPerSector(pSectorList, pImage):
                          [sector.getXRange()[1], amountOfLines], [r, g, b])
             listOfLines += [lines]
             sector.addIndividualToPopulation(lines)
-            amountOfLinesCreated += 1
-
-
-def addImageLines(pImage):
-    global listOfLines
-    numberOfSectionsPerLine = Constants.IMAGESIZE[0] / Constants.NUMBER_OF_LINES + 1
-    xPoint = Constants.IMAGESIZE[0] - 1
-    newImage = Image.new("RGB", (Constants.IMAGESIZE[0], Constants.IMAGESIZE[1]))
-    imageForDrawing = ImageDraw.Draw(newImage)
-    imageForColor = ImageDraw.Draw(pImage)
-    rgbImage = pImage.convert('RGB')
-    sectorDivision = Constants.IMAGESIZE[0] // (Constants.NUMBER_OF_LINES + 1)
-
-    for linesPerPixel in range(0, xPoint, 10):
-        populationPerSector = []
-        for moveRight in range(0, Constants.NUMBER_OF_LINES + 1):
-            colorList = []
-            linesList = []
-            for pixelsPerLine in range(sectorDivision * moveRight, (sectorDivision * (moveRight + 1)) - 1):
-                r, g, b = rgbImage.getpixel((pixelsPerLine, linesPerPixel))
-                newColor = Color(r, g, b, pixelsPerLine, linesPerPixel)
-                colorList += [newColor]
-            r, g, b = doColorPromedy(colorList)
-            imageForDrawing.line([(sectorDivision * moveRight, linesPerPixel), (sectorDivision * (moveRight + 1) - 1, linesPerPixel)], fill=(r, g, b), width=1)
-            lines = line([sectorDivision * moveRight, linesPerPixel], [sectorDivision * (moveRight + 1) - 1, linesPerPixel], [r, g, b])
-            listOfLines += [lines]
-            linesList += [lines]
-
-    print(len(listOfLines))
-    #pImage.show()
-    #newImage.show()
 
 
 def countPopulation(pPopulation):
-    firstRange = secondRange = thirdRange = fourthRange = fifthRange = sixRange = seventhRange = eighth = 0
-    for i in range(0, len(listOfLines)):
+    firstRange = secondRange = thirdRange = fourthRange = fifthRange = sixRange = seventhRange = eighthRange = 0
+    for i in range(0, len(pPopulation)):
         revisar = pPopulation[i].getColorRangeOfLines()
         if revisar == 1:
             firstRange += 1
@@ -110,14 +78,14 @@ def countPopulation(pPopulation):
         elif revisar == 7:
             seventhRange += 1
         elif revisar == 8:
-            eighth += 1
-    return firstRange, secondRange, thirdRange, fourthRange, fifthRange, sixRange, seventhRange, eighth
+            eighthRange += 1
+    return firstRange, secondRange, thirdRange, fourthRange, fifthRange, sixRange, seventhRange, eighthRange
 
 
-def createChromosomeRepresentation():
-    global listOfLines
-    populationPerRange = countPopulation(listOfLines)
-    totalPopulation = sum(populationPerRange)
+def createChromosomeRepresentation(pSectorList):
+    for sector in pSectorList:
+        populationPerRange = countPopulation(sector.getPopulation())
+        totalPopulation = sum(populationPerRange)
     print()
     pass
 

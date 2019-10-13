@@ -34,14 +34,8 @@ class Sector:
     def sortNonWhiteColorsSamplesByYCoordinate(self):
         self.__nonWhiteSamples.sort(key=lambda x: x.getYCoordinate())
 
-    def sortNonWhiteColorsSamplesByBothCoordinates(self):
-        self.__nonWhiteSamples.sort(key=lambda x: x.getYCoordinate() + x.getXCoordinate())
-
     def setSectorNumber(self, pSectorNumber):
         self.__sectorNumber = pSectorNumber
-
-    def getSectorNumber(self):
-        return self.__sectorNumber
 
     def setWhitePercentage(self):
         self.__whitePercentage = (self.__quantityOfWhiteSamples * 100) / (self.__quantityOfWhiteSamples + self.__quantityOfNonWhiteSamples)
@@ -52,12 +46,6 @@ class Sector:
 
     def getNonWhiteSamples(self):
         return self.__nonWhiteSamples
-
-    def getRandomColorSample(self):
-        return self.__nonWhiteSamples[random.randint(0, len(self.__nonWhiteSamples) - 1)]
-
-    def getLenOfNonWhiteSamples(self):
-        return len(self.__nonWhiteSamples)
 
     def getAverageColor(self):
         r, g, b = 0, 0, 0
@@ -82,15 +70,6 @@ class Sector:
     def getXRange(self):
         return self.__xRange
 
-    def searchPointByYCoordinate(self, pY):
-        for color in self.__nonWhiteSamples:
-            if color.getYCoordinate() == pY:
-                return color
-        return None
-
-    def reverseColorsOrder(self):
-        self.__nonWhiteSamples.reverse()
-
     def getRandomCoordinate(self):
         randomCoordinateIndex = random.randint(0, len(self.__possibleCoordinates) - 1)
         return randomCoordinateIndex, self.__possibleCoordinates[randomCoordinateIndex]
@@ -107,16 +86,8 @@ class Sector:
     def addIndividualToPopulation(self, pIndividual):
         self.__population += [pIndividual]
 
+    def getPopulation(self):
+        return self.__population
+
     def __str__(self):
         return "Sector Number: " + str(self.__sectorNumber)
-
-
-def getSectorWithTheLowestPercentageOfWhite(pSectorsList, pAdjacencyList):
-    sectorWithTheLowestWhitePercentage = pSectorsList[pAdjacencyList[0]]
-    sectorIndex = pAdjacencyList[0]
-    for adjacentSectorIndex in range(1, len(pAdjacencyList) - 1):
-        adjacentSector = pSectorsList[adjacentSectorIndex]
-        if adjacentSector.getWhitePercentage() < sectorWithTheLowestWhitePercentage.getWhitePercentage():
-            sectorWithTheLowestWhitePercentage = adjacentSector
-            sectorIndex = pAdjacencyList[adjacentSectorIndex]
-    return sectorWithTheLowestWhitePercentage, sectorIndex

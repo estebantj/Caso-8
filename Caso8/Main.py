@@ -46,6 +46,7 @@ if __name__ == "__main__" :
 
     #addImageLines(image)
     createPopulationPerSector(sampleLists, image)
+    createChromosomeRepresentation(sampleLists)
 
     # Creation of the header of the HTML
     Constants.HTMLFILE = open("View.html", "w")
