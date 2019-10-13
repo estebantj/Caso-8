@@ -1,9 +1,9 @@
-import math
 import Constants
 from Colors import Color
 from PIL import Image, ImageDraw
 
 listOfLines = []
+
 
 class line:
     def __init__(self, pFirstCoordinate, pSecondCoordinate, pColor):
@@ -20,6 +20,7 @@ class line:
     def getColorRangeOfLines(self):
         return self.__colorRange
 
+
 def getColorRange(pRed, pGreen, pBlue):
     if pRed <= 127 and pGreen <= 127 and pBlue <= 127:
         return 1
@@ -31,12 +32,34 @@ def getColorRange(pRed, pGreen, pBlue):
         return 4
     elif pRed >= 128 and pGreen >= 128 and pBlue <= 127:
         return 5
-    elif pRed >= 128 and pGreen <= 127 and pBlue >= 128:
+    elif pRed <= 127 and pGreen >= 128 and pBlue >= 128:
         return 6
-    elif pRed >= 128 and pGreen >= 128 and pBlue >= 128:
+    elif pRed >= 128 and pGreen <= 127 and pBlue >= 128:
         return 7
+    elif pRed >= 128 and pGreen >= 128 and pBlue >= 128:
+        return 8
     else:
         return -1
+
+
+def createPopulationPerSector(pSectorList, pImage):
+    global listOfLines
+    rgbImage = pImage.convert('RGB')
+    for sector in pSectorList:
+        amountOfLinesCreated = 0
+        for amountOfLines in range(sector.getYRange()[0], sector.getYRange()[1], 2):
+            colorList = []
+            for pixelsPerLine in range(sector.getXRange()[0], sector.getXRange()[1]):
+                r, g, b = rgbImage.getpixel((pixelsPerLine, amountOfLines))
+                newColor = Color(r, g, b, pixelsPerLine, amountOfLines)
+                colorList += [newColor]
+            r, g, b = doColorPromedy(colorList)
+            lines = line([sector.getXRange()[0], amountOfLines],
+                         [sector.getXRange()[1], amountOfLines], [r, g, b])
+            listOfLines += [lines]
+            sector.addIndividualToPopulation(lines)
+            amountOfLinesCreated += 1
+
 
 def addImageLines(pImage):
     global listOfLines
@@ -64,26 +87,40 @@ def addImageLines(pImage):
             linesList += [lines]
 
     print(len(listOfLines))
-    uno = dos = tres = cuatro = cinco = seis = siete = 0
+    #pImage.show()
+    #newImage.show()
+
+
+def countPopulation(pPopulation):
+    firstRange = secondRange = thirdRange = fourthRange = fifthRange = sixRange = seventhRange = eighth = 0
     for i in range(0, len(listOfLines)):
-        revisar = listOfLines[i].getColorRangeOfLines()
+        revisar = pPopulation[i].getColorRangeOfLines()
         if revisar == 1:
-            uno += 1
+            firstRange += 1
         elif revisar == 2:
-            dos += 1
+            secondRange += 1
         elif revisar == 3:
-            tres += 1
+            thirdRange += 1
         elif revisar == 4:
-            cuatro += 1
+            fourthRange += 1
         elif revisar == 5:
-            cinco += 1
+            fifthRange += 1
         elif revisar == 6:
-            seis += 1
+            sixRange += 1
         elif revisar == 7:
-            siete += 1
-    print(uno, dos, tres, cuatro, cinco, seis, siete)
-    pImage.show()
-    newImage.show()
+            seventhRange += 1
+        elif revisar == 8:
+            eighth += 1
+    return firstRange, secondRange, thirdRange, fourthRange, fifthRange, sixRange, seventhRange, eighth
+
+
+def createChromosomeRepresentation():
+    global listOfLines
+    populationPerRange = countPopulation(listOfLines)
+    totalPopulation = sum(populationPerRange)
+    print()
+    pass
+
 
 def doColorPromedy(colorList):
     r = g = b = 0

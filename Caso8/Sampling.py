@@ -2,7 +2,7 @@ import random
 from Colors import Color
 import Constants
 from Sector import Sector
-from AdjacencyMatrix import *
+
 
 def createSectors():
     sampleOfSectors = []

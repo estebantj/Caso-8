@@ -14,6 +14,7 @@ class Sector:
         self.__sectorProbability = 1
         self.__quantityOfWhiteSamples = 0
         self.__quantityOfNonWhiteSamples = 0
+        self.__population = []
 
     def addColorSample(self, pColorSample):
         if pColorSample.isWhite():
@@ -78,6 +79,9 @@ class Sector:
     def getYRange(self):
         return self.__yRange
 
+    def getXRange(self):
+        return self.__xRange
+
     def searchPointByYCoordinate(self, pY):
         for color in self.__nonWhiteSamples:
             if color.getYCoordinate() == pY:
@@ -99,6 +103,9 @@ class Sector:
 
     def reduceSectorProbability(self, pMinus):
         self.__sectorProbability -= pMinus
+
+    def addIndividualToPopulation(self, pIndividual):
+        self.__population += [pIndividual]
 
     def __str__(self):
         return "Sector Number: " + str(self.__sectorNumber)
