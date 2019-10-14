@@ -38,16 +38,19 @@ def createSectorsLineDivision(pImage):
 
 if __name__ == "__main__" :
     # Create the object Image
-    image = openImage(Constants.IMAGES[2])
+    image = openImage(Constants.IMAGES[3])
 
     # Creating samples and define colors
     sampleLists = createSectors()
     createColorsSamples(image, sampleLists)
 
     # Creation of Population
-    # createPopulationPerSector(sampleLists, image)
-    population = createPopulationPerSector2(sampleLists, image)
-    createChromosomeRepresentation2(population)
+    createPopulationPerSector(sampleLists, image)
+    createChromosomeRepresentation(sampleLists)
+
+    # population = createPopulationPerSector(sampleLists, image)
+    # createChromosomeRepresentation(population)
+
 
     # Creation of the header of the HTML
     Constants.HTMLFILE = open("View.html", "w")
