@@ -10,9 +10,11 @@ class line:
     def __init__(self, pFirstCoordinate, pSecondCoordinate, pColor, pSector):
         self.__firstCoordinate = pFirstCoordinate
         self.__secondCoordinate = pSecondCoordinate
+        self.__color = pColor
         self.__colorRange = getColorRange(pColor[0], pColor[1], pColor[2])
         self.__sector = pSector
         self.__fitness = self.calculateFitness()
+        self.__chromosome = None
 
     def getFirstPoint(self):
         return self.__firstCoordinate
@@ -20,11 +22,11 @@ class line:
     def getSecondPoint(self):
         return self.__secondCoordinate
 
-    def getColorRangeOfLines(self):
+    def getColorRange(self):
         return self.__colorRange
 
     def mate(self, pLine2):
-        return line(self.__firstCoordinate, self.__secondCoordinate, self.__colorRange, self.__sector)
+        return line(self.__firstCoordinate, self.__secondCoordinate, self.__color, self.__sector)
 
     def calculateFitness(self):
         # La funcion toma el rango en que se encuentra el sector
@@ -36,6 +38,9 @@ class line:
 
     def getFitness(self):
         return self.__fitness
+
+    def setChromosome(self, pChromosome):
+        self.__chromosome = pChromosome
 
 
 def getColorRange(pRed, pGreen, pBlue):
@@ -134,7 +139,7 @@ def createPopulationPerSector(pSectorList, pImage):
 def countPopulation(pPopulation):
     firstRange = secondRange = thirdRange = fourthRange = fifthRange = sixRange = seventhRange = eighthRange = nineRange = 0
     for i in range(0, len(pPopulation)):
-        revisar = pPopulation[i].getColorRangeOfLines()
+        revisar = pPopulation[i].getColorRange()
         if revisar == 1:
             firstRange += 1
         elif revisar == 2:
@@ -173,6 +178,11 @@ def createChromosomeRepresentation(pSectorList):
                         endOfLastRange = int(round(endOfLastRange + numberOfCombinationsForRange))
                 else:
                     ranges += [[0, 0]]
+            # Ahora a cada linea se le da un numero aleatorio segun su rango
+            for individual in sector.getPopulation():
+                colorRange = individual.getColorRange()
+                ColorRange = ranges[colorRange-1]
+                individual.setChromosome(random.randint(ColorRange[0], ColorRange[1]))
             if sector.getSectorNumber() == 28:
                 print(sector.getSectorNumber(), ranges)
             geneticAlgorithm(sector.getPopulation(), ranges)
