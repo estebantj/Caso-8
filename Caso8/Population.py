@@ -36,27 +36,27 @@ def getColorRange(pRed, pGreen, pBlue):
         return 6
     elif pRed >= 128 and pGreen <= 127 and pBlue >= 128:
         return 7
-    elif pRed >= 128 and pGreen >= 128 and pBlue >= 128:
+    elif (pRed >= 128 and pRed <= 245) and (pGreen >= 128 and pGreen <= 245) and (pBlue >= 128 and pBlue <= 245):
         return 8
     else:
-        return -1
+        return 9
 
 
-def createPopulationPerSector(pSectorList, pImage):
-    global listOfLines
-    rgbImage = pImage.convert('RGB')
-    for sector in pSectorList:
-        for amountOfLines in range(sector.getYRange()[0], sector.getYRange()[1], 2):
-            colorList = []
-            for pixelsPerLine in range(sector.getXRange()[0], sector.getXRange()[1]):
-                r, g, b = rgbImage.getpixel((pixelsPerLine, amountOfLines))
-                newColor = Color(r, g, b, pixelsPerLine, amountOfLines)
-                colorList += [newColor]
-            r, g, b = doColorPromedy(colorList)
-            lines = line([sector.getXRange()[0], amountOfLines],
-                         [sector.getXRange()[1], amountOfLines], [r, g, b])
-            listOfLines += [lines]
-            sector.addIndividualToPopulation(lines)
+# def createPopulationPerSector(pSectorList, pImage):
+#     global listOfLines
+#     rgbImage = pImage.convert('RGB')
+#     for sector in pSectorList:
+#         for amountOfLines in range(sector.getYRange()[0], sector.getYRange()[1], 2):
+#             colorList = []
+#             for pixelsPerLine in range(sector.getXRange()[0], sector.getXRange()[1]):
+#                 r, g, b = rgbImage.getpixel((pixelsPerLine, amountOfLines))
+#                 newColor = Color(r, g, b, pixelsPerLine, amountOfLines)
+#                 colorList += [newColor]
+#             r, g, b = doColorPromedy(colorList)
+#             lines = line([sector.getXRange()[0], amountOfLines],
+#                          [sector.getXRange()[1], amountOfLines], [r, g, b])
+#             listOfLines += [lines]
+#             sector.addIndividualToPopulation(lines)
 
 def createPopulationPerSector2(pSectorList, pImage):
     global listOfLines
@@ -68,7 +68,7 @@ def createPopulationPerSector2(pSectorList, pImage):
     rgbImage = pImage.convert('RGB')
     sectorDivision = Constants.IMAGESIZE[0] // (Constants.NUMBER_OF_LINES + 1)
 
-    for linesPerPixel in range(0, xPoint, 10):
+    for linesPerPixel in range(0, xPoint, 3):
         for moveRight in range(0, Constants.NUMBER_OF_LINES + 1):
             colorList = []
             for pixelsPerLine in range(sectorDivision * moveRight, (sectorDivision * (moveRight + 1)) - 1):
@@ -81,15 +81,17 @@ def createPopulationPerSector2(pSectorList, pImage):
             listOfLines += [lines]
 
     print(len(listOfLines))
-    createChromosomeRepresentation2(listOfLines)
     # pImage.show()
     # newImage.show()
+    return listOfLines
 
 def createChromosomeRepresentation2(listOfLines):
+    # [[0, 1159], [0, 0], [1160, 1200], [1201, 1208], [1209, 1220], [1221, 1251], [0, 0], [1252, 4094]]
+    # [[0, 1159], [0, 0], [1160, 1200], [1201, 1208], [1209, 1220], [1221, 1251], [0, 0], [1252, 1667]]
     populationPerRange = countPopulation(listOfLines)
+    numberOfCombinations = 2 ** Constants.AMOUNT_OF_BITS
+    totalPopulation = len(listOfLines)
     for sector in range(0, len(listOfLines)):
-        numberOfCombinations = 2 ** Constants.AMOUNT_OF_BITS
-        totalPopulation = len(listOfLines)
         endOfLastRange = 0
         ranges = []
         for amountOfPopulationInRange in populationPerRange:
@@ -101,11 +103,11 @@ def createChromosomeRepresentation2(listOfLines):
                     endOfLastRange = int(round(endOfLastRange + numberOfCombinationsForRange))
             else:
                 ranges += [[0, 0]]
-        if sector == 28:
-            print(sector, ranges)
+    print(ranges)
+    return ranges
 
 def countPopulation(pPopulation):
-    firstRange = secondRange = thirdRange = fourthRange = fifthRange = sixRange = seventhRange = eighthRange = 0
+    firstRange = secondRange = thirdRange = fourthRange = fifthRange = sixRange = seventhRange = eighthRange = nineRange = 0
     for i in range(0, len(pPopulation)):
         revisar = pPopulation[i].getColorRangeOfLines()
         if revisar == 1:
@@ -124,26 +126,28 @@ def countPopulation(pPopulation):
             seventhRange += 1
         elif revisar == 8:
             eighthRange += 1
-    return firstRange, secondRange, thirdRange, fourthRange, fifthRange, sixRange, seventhRange, eighthRange
+        elif revisar == 9:
+            nineRange += 1
+    return firstRange, secondRange, thirdRange, fourthRange, fifthRange, sixRange, seventhRange, eighthRange, nineRange
 
-def createChromosomeRepresentation(pSectorList):
-    for sector in pSectorList:
-        numberOfCombinations = 2 ** Constants.AMOUNT_OF_BITS
-        populationPerRange = countPopulation(sector.getPopulation())
-        totalPopulation = sum(populationPerRange)
-        endOfLastRange = 0
-        ranges = []
-        for amountOfPopulationInRange in populationPerRange:
-            if amountOfPopulationInRange > 0:
-                percentageForDistribution = amountOfPopulationInRange / totalPopulation
-                numberOfCombinationsForRange = numberOfCombinations * percentageForDistribution
-                ranges += [[endOfLastRange, int(round(endOfLastRange + numberOfCombinationsForRange - 1))]]
-                if numberOfCombinationsForRange != 0:
-                    endOfLastRange = int(round(endOfLastRange + numberOfCombinationsForRange))
-            else:
-                ranges += [[0, 0]]
-        if sector.getSectorNumber() == 28:
-            print(sector.getSectorNumber(), ranges)
+# def createChromosomeRepresentation(pSectorList):
+#     for sector in pSectorList:
+#         numberOfCombinations = 2 ** Constants.AMOUNT_OF_BITS
+#         populationPerRange = countPopulation(sector.getPopulation())
+#         totalPopulation = sum(populationPerRange)
+#         endOfLastRange = 0
+#         ranges = []
+#         for amountOfPopulationInRange in populationPerRange:
+#             if amountOfPopulationInRange > 0:
+#                 percentageForDistribution = amountOfPopulationInRange / totalPopulation
+#                 numberOfCombinationsForRange = numberOfCombinations * percentageForDistribution
+#                 ranges += [[endOfLastRange, int(round(endOfLastRange + numberOfCombinationsForRange - 1))]]
+#                 if numberOfCombinationsForRange != 0:
+#                     endOfLastRange = int(round(endOfLastRange + numberOfCombinationsForRange))
+#             else:
+#                 ranges += [[0, 0]]
+#         if sector.getSectorNumber() == 28:
+#             print(sector.getSectorNumber(), ranges)
 
 
 def doColorPromedy(colorList):
