@@ -15,6 +15,8 @@ class Sector:
         self.__quantityOfWhiteSamples = 0
         self.__quantityOfNonWhiteSamples = 0
         self.__population = []
+        self.__bytesRange = []
+        self.__target = []
 
     def addColorSample(self, pColorSample):
         if pColorSample.isWhite():
@@ -53,9 +55,9 @@ class Sector:
             r += color.getRed()
             g += color.getGreen()
             b += color.getBlue()
-        r = r / len(self.__nonWhiteSamples)
-        g = g / len(self.__nonWhiteSamples)
-        b = b / len(self.__nonWhiteSamples)
+        r = int(r / len(self.__nonWhiteSamples))
+        g = int(g / len(self.__nonWhiteSamples))
+        b = int(b / len(self.__nonWhiteSamples))
         return Color(r, g, b, 0, 0)
 
     def setXRange(self, pXRange):
@@ -91,6 +93,18 @@ class Sector:
 
     def getSectorNumber(self):
         return self.__sectorNumber
+
+    def setBytesRange(self, pBytesRange):
+        self.__bytesRange = pBytesRange
+
+    def getBytesRange(self):
+        return self.__bytesRange
+
+    def setTarget(self, pColorRange):
+        self.__target = self.__bytesRange[pColorRange - 1][1]
+
+    def getTarget(self):
+        return self.__target
 
     def __str__(self):
         return "Sector Number: " + str(self.__sectorNumber)

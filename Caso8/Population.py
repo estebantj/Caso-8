@@ -36,6 +36,9 @@ class line:
         fitness = abs(sectorTarget - self.__colorRange)
         return fitness
 
+    def setFitness(self, pFitness):
+        self.__fitness = pFitness
+
     def getFitness(self):
         return self.__fitness
 
@@ -173,16 +176,29 @@ def createChromosomeRepresentation(pSectorList):
                 if amountOfPopulationInRange > 0:
                     percentageForDistribution = amountOfPopulationInRange / totalPopulation
                     numberOfCombinationsForRange = numberOfCombinations * percentageForDistribution
-                    ranges += [[endOfLastRange, int(round(endOfLastRange + numberOfCombinationsForRange - 1))]]
+                    Range = [percentageForDistribution, [endOfLastRange, int(round(endOfLastRange + numberOfCombinationsForRange - 1))]]
+                    ranges += [Range]
                     if numberOfCombinationsForRange != 0:
                         endOfLastRange = int(round(endOfLastRange + numberOfCombinationsForRange))
                 else:
-                    ranges += [[0, 0]]
+                    Range = [0, [0, 0]]
+                    ranges += [Range]
+            # Se le da al sector los rangos de bytes y ademas se define en que rango esta el target del sector
+            sector.setBytesRange(ranges)
+            sectorAverageColor = sector.getAverageColor()
+            sectorColorRange = getColorRange(sectorAverageColor.getRed(), sectorAverageColor.getGreen(), sectorAverageColor.getBlue())
+            sector.setTarget(sectorColorRange)
+            ranges.sort(key=lambda x: x[0])
             # Ahora a cada linea se le da un numero aleatorio segun su rango
             for individual in sector.getPopulation():
-                colorRange = individual.getColorRange()
-                ColorRange = ranges[colorRange-1]
-                individual.setChromosome(random.randint(ColorRange[0], ColorRange[1]))
+                randomNumber = random.random()
+                Sum = 0
+                for rangeIndex in range(0, len(ranges)-1):
+                    actualPercentaje = ranges[rangeIndex][0]
+                    if Sum <= randomNumber < Sum + ranges[rangeIndex][0]:
+                        Range = ranges[rangeIndex][1]
+                        individual.setChromosome(random.randint(Range[0], Range[1]))
+                    Sum += ranges[rangeIndex][0]
             if sector.getSectorNumber() == 28:
                 print(sector.getSectorNumber(), ranges)
             geneticAlgorithm(sector.getPopulation(), ranges)
@@ -198,6 +214,14 @@ def doColorPromedy(colorList):
     g = g // len(colorList)
     b = b // len(colorList)
     return r, g, b
+
+
+def fitnessFunction(pPopulation):
+    sector = pPopulation[0].getSector()
+    sectorBytesRange = sector.getBytesRange()
+    sectorTarget = []
+    for individual in pPopulation:
+        pass
 
 
 def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
