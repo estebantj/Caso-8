@@ -158,10 +158,10 @@ def countPopulation(pPopulation):
 
 def createChromosomeRepresentation(pSectorList):
     numberOfCombinations = 2 ** Constants.AMOUNT_OF_BITS
-    populationPerRange = countPopulation(pSectorList[0].getPopulation())
-    totalPopulation = sum(populationPerRange)
     for sector in pSectorList:
         if sector.getWhitePercentage() != 100:
+            populationPerRange = countPopulation(sector.getPopulation())
+            totalPopulation = sum(populationPerRange)
             endOfLastRange = 0
             ranges = []
             for amountOfPopulationInRange in populationPerRange:
