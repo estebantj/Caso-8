@@ -76,12 +76,14 @@ def createPopulationPerSector(pSectorList, pImage):
                 for pixelsPerLine in range(sector.getXRange()[0], sector.getXRange()[1]):
                     r, g, b = rgbImage.getpixel((pixelsPerLine, amountOfLines))
                     newColor = Color(r, g, b, pixelsPerLine, amountOfLines)
-                    colorList += [newColor]
-                r, g, b = doColorPromedy(colorList)
-                lines = line([sector.getXRange()[0], amountOfLines],
-                             [sector.getXRange()[1], amountOfLines], [r, g, b], sector)
-                listOfLines += [lines]
-                sector.addIndividualToPopulation(lines)
+                    if not newColor.isWhite():
+                        colorList += [newColor]
+                if colorList != []:
+                    r, g, b = doColorPromedy(colorList)
+                    lines = line([sector.getXRange()[0], amountOfLines],
+                                 [sector.getXRange()[1], amountOfLines], [r, g, b], sector)
+                    listOfLines += [lines]
+                    sector.addIndividualToPopulation(lines)
 
 # def createPopulationPerSector2(pSectorList, pImage):
 #     global listOfLines
@@ -164,7 +166,7 @@ def countPopulation(pPopulation):
 def createChromosomeRepresentation(pSectorList):
     numberOfCombinations = 2 ** Constants.AMOUNT_OF_BITS
     for sector in pSectorList:
-        if sector.getWhitePercentage() != 100:
+        if sector.getWhitePercentage() != 100 and len(sector.getPopulation()) != 0:
             populationPerRange = countPopulation(sector.getPopulation())
             totalPopulation = sum(populationPerRange)
             endOfLastRange = 0
@@ -190,13 +192,12 @@ def createChromosomeRepresentation(pSectorList):
             ranges.sort(key=lambda x: x[0])
             # Ahora a cada linea se le da un numero aleatorio segun su rango
             AVG = 0
-            population = sector.getPopulation()
             if sector.getSectorNumber() == 16:
                 print()
-            for individual in population:
+            for individual in sector.getPopulation():
                 randomNumber = random.random()
                 Sum = 0
-                for rangeIndex in range(0, len(ranges)-1):
+                for rangeIndex in range(0, len(ranges)):
                     actualPercentaje = ranges[rangeIndex][0]
                     if Sum <= randomNumber < Sum + ranges[rangeIndex][0]:
                         Range = ranges[rangeIndex][1]
@@ -234,11 +235,10 @@ def fitnessFunction(pPopulation):
         print()
     for individual in pPopulation:
         chromosome = individual.getChromosome()
-        if chromosome == None:
-            print()
-        x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
-        if AVG + x < AVG:
-            individual.setFitness(1)
+        if chromosome != None:
+            x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
+            if AVG + x < AVG:
+                individual.setFitness(1)
 
 def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
     actualPopulation = pPopulation
