@@ -13,7 +13,7 @@ class line:
         self.__color = pColor
         self.__colorRange = getColorRange(pColor[0], pColor[1], pColor[2])
         self.__sector = pSector
-        self.__fitness = None
+        self.__fitness = 0
         self.__chromosome = None
 
     def getFirstPoint(self):
@@ -37,6 +37,11 @@ class line:
     def setChromosome(self, pChromosome):
         self.__chromosome = pChromosome
 
+    def getChromosome(self):
+        return self.__chromosome
+
+    def getSector(self):
+        return self.__sector
 
 def getColorRange(pRed, pGreen, pBlue):
     if pRed <= 127 and pGreen <= 127 and pBlue <= 127:
@@ -180,10 +185,15 @@ def createChromosomeRepresentation(pSectorList):
             sectorAverageColor = sector.getAverageColor()
             sectorColorRange = getColorRange(sectorAverageColor.getRed(), sectorAverageColor.getGreen(), sectorAverageColor.getBlue())
             sector.setTarget(sectorColorRange)
+            if sector.getTarget()[1] == 0:
+                print()
             ranges.sort(key=lambda x: x[0])
             # Ahora a cada linea se le da un numero aleatorio segun su rango
             AVG = 0
-            for individual in sector.getPopulation():
+            population = sector.getPopulation()
+            if sector.getSectorNumber() == 16:
+                print()
+            for individual in population:
                 randomNumber = random.random()
                 Sum = 0
                 for rangeIndex in range(0, len(ranges)-1):
@@ -196,9 +206,9 @@ def createChromosomeRepresentation(pSectorList):
                     Sum += ranges[rangeIndex][0]
             AVG = AVG // totalPopulation
             sector.setBytesAverage(AVG)
-            if sector.getSectorNumber() == 28:
-                print(sector.getSectorNumber(), ranges)
-            #geneticAlgorithm(sector.getPopulation(), ranges)
+            #if sector.getSectorNumber() == 28:
+                #print(sector.getSectorNumber(), ranges)
+            geneticAlgorithm(sector.getPopulation(), ranges)
 
 
 def doColorPromedy(colorList):
@@ -218,17 +228,25 @@ def fitnessFunction(pPopulation):
     sectorBytesRange = sector.getBytesRange()
     sectorTarget = sector.getTarget()
     sectorAverage = sector.getBytesAverage()
+    try:
+        AVG = int(sectorAverage / sectorTarget[1])
+    except ZeroDivisionError:
+        print()
     for individual in pPopulation:
-        pass
-
+        chromosome = individual.getChromosome()
+        if chromosome == None:
+            print()
+        x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
+        if AVG + x < AVG:
+            individual.setFitness(1)
 
 def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
     actualPopulation = pPopulation
     for generation in range(0, Constants.NUMBER_OF_GENERATIONS):
         # Primero se calcula el "fitness" de cada individuo
-
+        fitnessFunction(actualPopulation)
         # Luego se ordena la poblacion segun su "fitness"
-        actualPopulation.sort(key=lambda individual: individual.getFitness())
+        actualPopulation = [individual for individual in actualPopulation if individual.getFitness() == 1]
         # Un 10% pasa automaticamente a la siguiente generacion
         s = int((10 * len(actualPopulation)) / 100)
         newGeneration = []
