@@ -13,7 +13,7 @@ class line:
         self.__color = pColor
         self.__colorRange = getColorRange(pColor[0], pColor[1], pColor[2])
         self.__sector = pSector
-        self.__fitness = self.calculateFitness()
+        self.__fitness = None
         self.__chromosome = None
 
     def getFirstPoint(self):
@@ -27,14 +27,6 @@ class line:
 
     def mate(self, pLine2):
         return line(self.__firstCoordinate, self.__secondCoordinate, self.__color, self.__sector)
-
-    def calculateFitness(self):
-        # La funcion toma el rango en que se encuentra el sector
-        # Revisa la diferencia entre el rango de la linea y el sector, entre mas alto mas lejos
-        sectorAverageColor = self.__sector.getAverageColor()
-        sectorTarget = getColorRange(sectorAverageColor.getRed(), sectorAverageColor.getGreen(), sectorAverageColor.getBlue())
-        fitness = abs(sectorTarget - self.__colorRange)
-        return fitness
 
     def setFitness(self, pFitness):
         self.__fitness = pFitness
@@ -199,13 +191,14 @@ def createChromosomeRepresentation(pSectorList):
                     if Sum <= randomNumber < Sum + ranges[rangeIndex][0]:
                         Range = ranges[rangeIndex][1]
                         chromosome = random.randint(Range[0], Range[1])
+                        AVG += chromosome
                         individual.setChromosome(chromosome)
                     Sum += ranges[rangeIndex][0]
             AVG = AVG // totalPopulation
             sector.setBytesAverage(AVG)
             if sector.getSectorNumber() == 28:
                 print(sector.getSectorNumber(), ranges)
-            geneticAlgorithm(sector.getPopulation(), ranges)
+            #geneticAlgorithm(sector.getPopulation(), ranges)
 
 
 def doColorPromedy(colorList):
@@ -223,7 +216,8 @@ def doColorPromedy(colorList):
 def fitnessFunction(pPopulation):
     sector = pPopulation[0].getSector()
     sectorBytesRange = sector.getBytesRange()
-    sectorTarget = []
+    sectorTarget = sector.getTarget()
+    sectorAverage = sector.getBytesAverage()
     for individual in pPopulation:
         pass
 

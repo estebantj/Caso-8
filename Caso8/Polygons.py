@@ -39,5 +39,5 @@ def createHtmlPolygon(pointsList, pColor):
                   + str(colorRed) + \
                   ',' + str(colorGreen) + \
                   ',' + str(colorBlue) + \
-                  ');stroke:black;stroke-width:1" />\n'
+                  ')" />\n'
     return htmlPolygon
