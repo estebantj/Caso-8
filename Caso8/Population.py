@@ -5,7 +5,6 @@ import random
 
 listOfLines = []
 
-
 class line:
     def __init__(self, pFirstCoordinate, pSecondCoordinate, pColor, pSector):
         self.__firstCoordinate = pFirstCoordinate
@@ -58,85 +57,10 @@ def getColorRange(pRed, pGreen, pBlue):
         return 6
     elif pRed >= 128 and pGreen <= 127 and pBlue >= 128:
         return 7
-    #elif (pRed >= 128 and pRed <= 245) and (pGreen >= 128 and pGreen <= 245) and (pBlue >= 128 and pBlue <= 245):
-        #return 8
     elif pRed >= 128 and pGreen >= 128 and pBlue >= 128:
         return 8
     else:
         return 9
-
-
-def createPopulationPerSector(pSectorList, pImage):
-    global listOfLines
-    rgbImage = pImage.convert('RGB')
-    for sector in pSectorList:
-        if sector.getWhitePercentage() != 100:
-            for amountOfLines in range(sector.getYRange()[0], sector.getYRange()[1], 2):
-                colorList = []
-                for pixelsPerLine in range(sector.getXRange()[0], sector.getXRange()[1]):
-                    r, g, b = rgbImage.getpixel((pixelsPerLine, amountOfLines))
-                    newColor = Color(r, g, b, pixelsPerLine, amountOfLines)
-                    if not newColor.isWhite():
-                        colorList += [newColor]
-                if colorList != []:
-                    r, g, b = doColorPromedy(colorList)
-                    lines = line([sector.getXRange()[0], amountOfLines],
-                                 [sector.getXRange()[1], amountOfLines], [r, g, b], sector)
-                    listOfLines += [lines]
-                    sector.addIndividualToPopulation(lines)
-
-# def createPopulationPerSector2(pSectorList, pImage):
-#     global listOfLines
-#     numberOfSectionsPerLine = Constants.IMAGESIZE[0] / Constants.NUMBER_OF_LINES + 1
-#     xPoint = Constants.IMAGESIZE[0] - 1
-#     newImage = Image.new("RGB", (Constants.IMAGESIZE[0], Constants.IMAGESIZE[1]))
-#     imageForDrawing = ImageDraw.Draw(newImage)
-#     imageForColor = ImageDraw.Draw(pImage)
-#     rgbImage = pImage.convert('RGB')
-#     sectorDivision = Constants.IMAGESIZE[0] // (Constants.NUMBER_OF_LINES + 1)
-#
-#     for linesPerPixel in range(0, xPoint, 3):
-#         for moveRight in range(0, Constants.NUMBER_OF_LINES + 1):
-#             colorList = []
-#             for pixelsPerLine in range(sectorDivision * moveRight, (sectorDivision * (moveRight + 1)) - 1):
-#                 r, g, b = rgbImage.getpixel((pixelsPerLine, linesPerPixel))
-#                 newColor = Color(r, g, b, pixelsPerLine, linesPerPixel)
-#                 colorList += [newColor]
-#             r, g, b = doColorPromedy(colorList)
-#             imageForDrawing.line(
-#                 [(sectorDivision * moveRight, linesPerPixel), (sectorDivision * (moveRight + 1) - 1, linesPerPixel)],
-#                 fill=(r, g, b), width=1)
-#             lines = line([sectorDivision * moveRight, linesPerPixel],
-#                          [sectorDivision * (moveRight + 1) - 1, linesPerPixel], [r, g, b])
-#             listOfLines += [lines]
-#
-#     print(len(listOfLines))
-#     # pImage.show()
-#     # newImage.show()
-#     return listOfLines
-
-
-# def createChromosomeRepresentation2(listOfLines):
-#     # [[0, 1159], [0, 0], [1160, 1200], [1201, 1208], [1209, 1220], [1221, 1251], [0, 0], [1252, 4094]]
-#     # [[0, 1159], [0, 0], [1160, 1200], [1201, 1208], [1209, 1220], [1221, 1251], [0, 0], [1252, 1667]]
-#     populationPerRange = countPopulation(listOfLines)
-#     numberOfCombinations = 2 ** Constants.AMOUNT_OF_BITS
-#     totalPopulation = len(listOfLines)
-#     for sector in range(0, len(listOfLines)):
-#         endOfLastRange = 0
-#         ranges = []
-#         for amountOfPopulationInRange in populationPerRange:
-#             if amountOfPopulationInRange > 0:
-#                 percentageForDistribution = amountOfPopulationInRange / totalPopulation
-#                 numberOfCombinationsForRange = numberOfCombinations * percentageForDistribution
-#                 ranges += [[endOfLastRange, int(round(endOfLastRange + numberOfCombinationsForRange - 1))]]
-#                 if numberOfCombinationsForRange != 0:
-#                     endOfLastRange = int(round(endOfLastRange + numberOfCombinationsForRange))
-#             else:
-#                 ranges += [[0, 0]]
-#     print(ranges)
-#     return ranges
-
 
 def countPopulation(pPopulation):
     firstRange = secondRange = thirdRange = fourthRange = fifthRange = sixRange = seventhRange = eighthRange = nineRange = 0
@@ -162,6 +86,24 @@ def countPopulation(pPopulation):
             nineRange += 1
     return firstRange, secondRange, thirdRange, fourthRange, fifthRange, sixRange, seventhRange, eighthRange, nineRange
 
+def createPopulationPerSector(pSectorList, pImage):
+    global listOfLines
+    rgbImage = pImage.convert('RGB')
+    for sector in pSectorList:
+        if sector.getWhitePercentage() != 100:
+            for amountOfLines in range(sector.getYRange()[0], sector.getYRange()[1], 2):
+                colorList = []
+                for pixelsPerLine in range(sector.getXRange()[0], sector.getXRange()[1]):
+                    r, g, b = rgbImage.getpixel((pixelsPerLine, amountOfLines))
+                    newColor = Color(r, g, b, pixelsPerLine, amountOfLines)
+                    if not newColor.isWhite():
+                        colorList += [newColor]
+                if colorList != []:
+                    r, g, b = doColorPromedy(colorList)
+                    lines = line([sector.getXRange()[0], amountOfLines],
+                                 [sector.getXRange()[1], amountOfLines], [r, g, b], sector)
+                    listOfLines += [lines]
+                    sector.addIndividualToPopulation(lines)
 
 def createChromosomeRepresentation(pSectorList):
     numberOfCombinations = 2 ** Constants.AMOUNT_OF_BITS
@@ -187,13 +129,9 @@ def createChromosomeRepresentation(pSectorList):
             sectorAverageColor = sector.getAverageColor()
             sectorColorRange = getColorRange(sectorAverageColor.getRed(), sectorAverageColor.getGreen(), sectorAverageColor.getBlue())
             sector.setTarget(sectorColorRange)
-            if sector.getTarget()[1] == 0:
-                print()
             ranges.sort(key=lambda x: x[0])
             # Ahora a cada linea se le da un numero aleatorio segun su rango
             AVG = 0
-            if sector.getSectorNumber() == 16:
-                print()
             for individual in sector.getPopulation():
                 randomNumber = random.random()
                 Sum = 0
@@ -207,10 +145,46 @@ def createChromosomeRepresentation(pSectorList):
                     Sum += ranges[rangeIndex][0]
             AVG = AVG // totalPopulation
             sector.setBytesAverage(AVG)
-            #if sector.getSectorNumber() == 28:
-                #print(sector.getSectorNumber(), ranges)
             geneticAlgorithm(sector.getPopulation(), ranges)
 
+def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
+    actualPopulation = pPopulation
+    for generation in range(0, Constants.NUMBER_OF_GENERATIONS):
+        # Primero se calcula el "fitness" de cada individuo
+        if len(actualPopulation) > 0:
+            fitnessFunction(actualPopulation)
+        else:
+            print("Ya no hay poblacion con la que trabajar")
+            break
+        # Luego se ordena la poblacion segun su "fitness"
+        for individual in actualPopulation:
+            if individual.getFitness() == 1:
+                actualPopulation += actualPopulation[individual]
+        print("Tamaño de la poblacion actual: ", len(actualPopulation))
+        # Un 10% pasa automaticamente a la siguiente generacion
+        s = int((10 * len(actualPopulation)) / 100)
+        newGeneration = []
+        newGeneration.extend(actualPopulation[:s])
+        for _ in range(0, int(len(actualPopulation)/2 - 1)):
+            parent1 = random.choice(actualPopulation)
+            parent2 = random.choice(actualPopulation)
+            child = parent1.mate(parent2)
+            newGeneration.append(child)
+        actualPopulation = newGeneration
+    print("-----------------")
+
+def fitnessFunction(pPopulation):
+    sector = pPopulation[0].getSector()  # <------ Problema Aqui
+    sectorBytesRange = sector.getBytesRange()
+    sectorTarget = sector.getTarget()
+    sectorAverage = sector.getBytesAverage()
+    AVG = int(sectorAverage / sectorTarget[1])
+    for individual in pPopulation:
+        chromosome = individual.getChromosome()
+        if chromosome != None:
+            x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
+            if AVG + x < AVG:
+                individual.setFitness(1)
 
 def doColorPromedy(colorList):
     r = g = b = 0
@@ -222,38 +196,3 @@ def doColorPromedy(colorList):
     g = g // len(colorList)
     b = b // len(colorList)
     return r, g, b
-
-
-def fitnessFunction(pPopulation):
-    sector = pPopulation[0].getSector()
-    sectorBytesRange = sector.getBytesRange()
-    sectorTarget = sector.getTarget()
-    sectorAverage = sector.getBytesAverage()
-    try:
-        AVG = int(sectorAverage / sectorTarget[1])
-    except ZeroDivisionError:
-        print()
-    for individual in pPopulation:
-        chromosome = individual.getChromosome()
-        if chromosome != None:
-            x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
-            if AVG + x < AVG:
-                individual.setFitness(1)
-
-def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
-    actualPopulation = pPopulation
-    for generation in range(0, Constants.NUMBER_OF_GENERATIONS):
-        # Primero se calcula el "fitness" de cada individuo
-        fitnessFunction(actualPopulation)
-        # Luego se ordena la poblacion segun su "fitness"
-        actualPopulation = [individual for individual in actualPopulation if individual.getFitness() == 1]
-        # Un 10% pasa automaticamente a la siguiente generacion
-        s = int((10 * len(actualPopulation)) / 100)
-        newGeneration = []
-        newGeneration.extend(actualPopulation[:s])
-        for _ in range(0, int(len(actualPopulation)/2 - 1)):
-            parent1 = random.choice(actualPopulation)
-            parent2 = random.choice(actualPopulation)
-            child = parent1.mate(parent2)
-            newGeneration.append(child)
-        actualPopulation = newGeneration
