@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="084817ba-afce-4f2a-accb-2a4646440b6b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Caso8/Population.py" beforeDir="false" afterPath="$PROJECT_DIR$/Caso8/Population.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Caso8/View.html" beforeDir="false" afterPath="$PROJECT_DIR$/Caso8/View.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,14 +24,11 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Caso8/AdjacencyMatrix.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/Caso8/Index.html" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Caso8/Sampling.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Caso8/Colors.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Caso8/Sector.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Caso8/Polygons.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Caso8/Constants.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/Caso8/HTMLImage.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Caso8/Main.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Caso8/Population.py" root0="SKIP_INSPECTION" />
   </component>

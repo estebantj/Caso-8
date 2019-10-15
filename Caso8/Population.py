@@ -1,51 +1,190 @@
-import math
 import Constants
 from Colors import Color
 from PIL import Image, ImageDraw
+import random
 
-# def polygonShapes(colorSampleAtTop, colorSampleAtLeft, colorSampleAtBottom, colorSampleAtRight):
-#     polygonPoints = [colorSampleAtTop, colorSampleAtLeft, colorSampleAtBottom, colorSampleAtRight]
-#     distances = []
-#     for point in range (0, len(polygonPoints)):
-#         pointI = polygonPoints[point]
-#         if point != 3:
-#             pointII = polygonPoints[point + 1]
-#             distances += [math.hypot(pointII.getXCoordinate() - pointI.getXCoordinate(),
-#                                      pointII.getYCoordinate() - pointI.getYCoordinate())]
-#             print("Distancia entre el punto: ", str(pointI.getXCoordinate()), str(pointI.getYCoordinate()),
-#                   " y ", str(pointII.getXCoordinate()), str(pointII.getYCoordinate()), " es:", str(distances[point]))
-#         else:
-#             pointII = polygonPoints[0]
-#             distances += [math.hypot(pointII.getXCoordinate() - pointI.getXCoordinate(),
-#                                      pointII.getYCoordinate() - pointI.getYCoordinate())]
-#             print("Distancia entre el punto: ", str(pointI.getXCoordinate()), str(pointI.getYCoordinate()),
-#                   " y ", str(pointII.getXCoordinate()), str(pointII.getYCoordinate()), " es:", str(distances[point]))
-#     perimetro = 0
-#     for elemento in range(0, len(distances)): perimetro += distances[elemento]
-#     print("El Perimetro del poligono es: ", perimetro)
-#     print("/////////////////////")
+listOfLines = []
 
-def addImageLines(image):
-    numberOfSectionsPerLine = Constants.IMAGESIZE[0] / Constants.NUMBER_OF_LINES + 1
-    linesList = []
-    xPoint = Constants.IMAGESIZE[0] - 1
-    imageForDrawing = ImageDraw.Draw(image)
-    rgbImage = image.convert('RGB')
-    sectorDivision = Constants.IMAGESIZE[0] // (Constants.NUMBER_OF_LINES + 1)
+class line:
+    def __init__(self, pFirstCoordinate, pSecondCoordinate, pColor, pSector):
+        self.__firstCoordinate = pFirstCoordinate
+        self.__secondCoordinate = pSecondCoordinate
+        self.__color = pColor
+        self.__colorRange = getColorRange(pColor[0], pColor[1], pColor[2])
+        self.__sector = pSector
+        self.__fitness = 0
+        self.__chromosome = None
 
-    for linesPerPixel in range(0, xPoint):
-        # linesList += [[0, linesPerPixel],[xPoint, linesPerPixel]]
+    def getFirstPoint(self):
+        return self.__firstCoordinate
 
-        for moveRight in range(0, Constants.NUMBER_OF_LINES + 1):
-            colorList = []
-            for pixelsPerLine in range(sectorDivision * moveRight, sectorDivision * (moveRight + 1)):
-                r, g, b = rgbImage.getpixel((pixelsPerLine, linesPerPixel))
-                newColor = Color(r, g, b, pixelsPerLine, linesPerPixel)
-                colorList += [newColor]
-            r, g, b = doColorPromedy(colorList);
-            imageForDrawing.line([(sectorDivision * moveRight, linesPerPixel), (sectorDivision * (moveRight + 1), linesPerPixel)], fill = (r,g,b), width = 1)
-    image.show()
+    def getSecondPoint(self):
+        return self.__secondCoordinate
 
+    def getColorRange(self):
+        return self.__colorRange
+
+    def mate(self, pLine2):
+        return line(self.__firstCoordinate, self.__secondCoordinate, self.__color, self.__sector)
+
+    def setFitness(self, pFitness):
+        self.__fitness = pFitness
+
+    def getFitness(self):
+        return self.__fitness
+
+    def setChromosome(self, pChromosome):
+        self.__chromosome = pChromosome
+
+    def getChromosome(self):
+        return self.__chromosome
+
+    def getSector(self):
+        return self.__sector
+
+def getColorRange(pRed, pGreen, pBlue):
+    if pRed <= 127 and pGreen <= 127 and pBlue <= 127:
+        return 1
+    elif pRed >= 128 and pGreen <= 127 and pBlue <= 127:
+        return 2
+    elif pRed <= 127 and pGreen >= 128 and pBlue <= 127:
+        return 3
+    elif pRed <= 127 and pGreen <= 127 and pBlue >= 128:
+        return 4
+    elif pRed >= 128 and pGreen >= 128 and pBlue <= 127:
+        return 5
+    elif pRed <= 127 and pGreen >= 128 and pBlue >= 128:
+        return 6
+    elif pRed >= 128 and pGreen <= 127 and pBlue >= 128:
+        return 7
+    elif pRed >= 128 and pGreen >= 128 and pBlue >= 128:
+        return 8
+    else:
+        return 9
+
+def countPopulation(pPopulation):
+    firstRange = secondRange = thirdRange = fourthRange = fifthRange = sixRange = seventhRange = eighthRange = nineRange = 0
+    for i in range(0, len(pPopulation)):
+        revisar = pPopulation[i].getColorRange()
+        if revisar == 1:
+            firstRange += 1
+        elif revisar == 2:
+            secondRange += 1
+        elif revisar == 3:
+            thirdRange += 1
+        elif revisar == 4:
+            fourthRange += 1
+        elif revisar == 5:
+            fifthRange += 1
+        elif revisar == 6:
+            sixRange += 1
+        elif revisar == 7:
+            seventhRange += 1
+        elif revisar == 8:
+            eighthRange += 1
+        elif revisar == 9:
+            nineRange += 1
+    return firstRange, secondRange, thirdRange, fourthRange, fifthRange, sixRange, seventhRange, eighthRange, nineRange
+
+def createPopulationPerSector(pSectorList, pImage):
+    global listOfLines
+    rgbImage = pImage.convert('RGB')
+    for sector in pSectorList:
+        if sector.getWhitePercentage() != 100:
+            for amountOfLines in range(sector.getYRange()[0], sector.getYRange()[1], 2):
+                colorList = []
+                for pixelsPerLine in range(sector.getXRange()[0], sector.getXRange()[1]):
+                    r, g, b = rgbImage.getpixel((pixelsPerLine, amountOfLines))
+                    newColor = Color(r, g, b, pixelsPerLine, amountOfLines)
+                    if not newColor.isWhite():
+                        colorList += [newColor]
+                if colorList != []:
+                    r, g, b = doColorPromedy(colorList)
+                    lines = line([sector.getXRange()[0], amountOfLines],
+                                 [sector.getXRange()[1], amountOfLines], [r, g, b], sector)
+                    listOfLines += [lines]
+                    sector.addIndividualToPopulation(lines)
+
+def createChromosomeRepresentation(pSectorList):
+    numberOfCombinations = 2 ** Constants.AMOUNT_OF_BITS
+    for sector in pSectorList:
+        if sector.getWhitePercentage() != 100 and len(sector.getPopulation()) != 0:
+            populationPerRange = countPopulation(sector.getPopulation())
+            totalPopulation = sum(populationPerRange)
+            endOfLastRange = 0
+            ranges = []
+            for amountOfPopulationInRange in populationPerRange:
+                if amountOfPopulationInRange > 0:
+                    percentageForDistribution = amountOfPopulationInRange / totalPopulation
+                    numberOfCombinationsForRange = numberOfCombinations * percentageForDistribution
+                    Range = [percentageForDistribution, [endOfLastRange, int(round(endOfLastRange + numberOfCombinationsForRange - 1))]]
+                    ranges += [Range]
+                    if numberOfCombinationsForRange != 0:
+                        endOfLastRange = int(round(endOfLastRange + numberOfCombinationsForRange))
+                else:
+                    Range = [0, [0, 0]]
+                    ranges += [Range]
+            # Se le da al sector los rangos de bytes y ademas se define en que rango esta el target del sector
+            sector.setBytesRange(ranges)
+            sectorAverageColor = sector.getAverageColor()
+            sectorColorRange = getColorRange(sectorAverageColor.getRed(), sectorAverageColor.getGreen(), sectorAverageColor.getBlue())
+            sector.setTarget(sectorColorRange)
+            ranges.sort(key=lambda x: x[0])
+            # Ahora a cada linea se le da un numero aleatorio segun su rango
+            AVG = 0
+            for individual in sector.getPopulation():
+                randomNumber = random.random()
+                Sum = 0
+                for rangeIndex in range(0, len(ranges)):
+                    actualPercentaje = ranges[rangeIndex][0]
+                    if Sum <= randomNumber < Sum + ranges[rangeIndex][0]:
+                        Range = ranges[rangeIndex][1]
+                        chromosome = random.randint(Range[0], Range[1])
+                        AVG += chromosome
+                        individual.setChromosome(chromosome)
+                    Sum += ranges[rangeIndex][0]
+            AVG = AVG // totalPopulation
+            sector.setBytesAverage(AVG)
+            geneticAlgorithm(sector.getPopulation(), ranges)
+
+def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
+    actualPopulation = pPopulation
+    for generation in range(0, Constants.NUMBER_OF_GENERATIONS):
+        # Primero se calcula el "fitness" de cada individuo
+        if len(actualPopulation) > 0:
+            fitnessFunction(actualPopulation)
+        else:
+            print("Ya no hay poblacion con la que trabajar")
+            break
+        # Luego se ordena la poblacion segun su "fitness"
+        for individual in actualPopulation:
+            if individual.getFitness() == 1:
+                actualPopulation += actualPopulation[individual]
+        print("Tamaño de la poblacion actual: ", len(actualPopulation))
+        # Un 10% pasa automaticamente a la siguiente generacion
+        s = int((10 * len(actualPopulation)) / 100)
+        newGeneration = []
+        newGeneration.extend(actualPopulation[:s])
+        for _ in range(0, int(len(actualPopulation)/2 - 1)):
+            parent1 = random.choice(actualPopulation)
+            parent2 = random.choice(actualPopulation)
+            child = parent1.mate(parent2)
+            newGeneration.append(child)
+        actualPopulation = newGeneration
+    print("-----------------")
+
+def fitnessFunction(pPopulation):
+    sector = pPopulation[0].getSector()  # <------ Problema Aqui
+    sectorBytesRange = sector.getBytesRange()
+    sectorTarget = sector.getTarget()
+    sectorAverage = sector.getBytesAverage()
+    AVG = int(sectorAverage / sectorTarget[1])
+    for individual in pPopulation:
+        chromosome = individual.getChromosome()
+        if chromosome != None:
+            x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
+            if AVG + x < AVG:
+                individual.setFitness(1)
 
 def doColorPromedy(colorList):
     r = g = b = 0
