@@ -165,11 +165,11 @@ def countPopulation(pPopulation):
 
 
 def createChromosomeRepresentation(pSectorList):
+    numberOfCombinations = 2 ** Constants.AMOUNT_OF_BITS
+    populationPerRange = countPopulation(pSectorList[0].getPopulation())
+    totalPopulation = sum(populationPerRange)
     for sector in pSectorList:
         if sector.getWhitePercentage() != 100:
-            numberOfCombinations = 2 ** Constants.AMOUNT_OF_BITS
-            populationPerRange = countPopulation(sector.getPopulation())
-            totalPopulation = sum(populationPerRange)
             endOfLastRange = 0
             ranges = []
             for amountOfPopulationInRange in populationPerRange:
@@ -190,6 +190,7 @@ def createChromosomeRepresentation(pSectorList):
             sector.setTarget(sectorColorRange)
             ranges.sort(key=lambda x: x[0])
             # Ahora a cada linea se le da un numero aleatorio segun su rango
+            AVG = 0
             for individual in sector.getPopulation():
                 randomNumber = random.random()
                 Sum = 0
@@ -197,8 +198,11 @@ def createChromosomeRepresentation(pSectorList):
                     actualPercentaje = ranges[rangeIndex][0]
                     if Sum <= randomNumber < Sum + ranges[rangeIndex][0]:
                         Range = ranges[rangeIndex][1]
-                        individual.setChromosome(random.randint(Range[0], Range[1]))
+                        chromosome = random.randint(Range[0], Range[1])
+                        individual.setChromosome(chromosome)
                     Sum += ranges[rangeIndex][0]
+            AVG = AVG // totalPopulation
+            sector.setBytesAverage(AVG)
             if sector.getSectorNumber() == 28:
                 print(sector.getSectorNumber(), ranges)
             geneticAlgorithm(sector.getPopulation(), ranges)

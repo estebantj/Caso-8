@@ -17,6 +17,7 @@ class Sector:
         self.__population = []
         self.__bytesRange = []
         self.__target = []
+        self.__bytesAverage = 0
 
     def addColorSample(self, pColorSample):
         if pColorSample.isWhite():
@@ -105,6 +106,12 @@ class Sector:
 
     def getTarget(self):
         return self.__target
+
+    def setBytesAverage(self, pBytesAverage):
+        self.__bytesAverage = pBytesAverage
+
+    def getBytesAverage(self):
+        return self.__bytesAverage
 
     def __str__(self):
         return "Sector Number: " + str(self.__sectorNumber)
