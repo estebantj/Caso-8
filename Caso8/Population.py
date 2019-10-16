@@ -2,6 +2,7 @@ import Constants
 from Colors import Color
 from PIL import Image, ImageDraw
 import random
+from Polygons import createHtmlPolygon
 
 listOfLines = []
 
@@ -138,15 +139,19 @@ def createPopulationPerSector(pSectorList, pImage):
         if sector.getWhitePercentage() != 100:
             for amountOfLines in range(sector.getYRange()[0], sector.getYRange()[1], 2):
                 colorList = []
+                startCoordinate = None
+                endCoordinate = None
                 for pixelsPerLine in range(sector.getXRange()[0], sector.getXRange()[1]):
                     r, g, b = rgbImage.getpixel((pixelsPerLine, amountOfLines))
                     newColor = Color(r, g, b, pixelsPerLine, amountOfLines)
                     if not newColor.isWhite():
+                        if startCoordinate is None:
+                            startCoordinate = [pixelsPerLine, amountOfLines]
+                        endCoordinate = [pixelsPerLine, amountOfLines]
                         colorList += [newColor]
                 if colorList != []:
                     r, g, b = doColorPromedy(colorList)
-                    lines = line([sector.getXRange()[0], amountOfLines],
-                                 [sector.getXRange()[1], amountOfLines], [r, g, b], sector)
+                    lines = line(startCoordinate, endCoordinate, [r, g, b], sector)
                     listOfLines += [lines]
                     sector.addIndividualToPopulation(lines)
 
@@ -190,17 +195,49 @@ def createChromosomeRepresentation(pSectorList):
                     Sum += ranges[rangeIndex][0]
             AVG = AVG // totalPopulation
             sector.setBytesAverage(AVG)
+            print("Sector actual:", sector.getSectorNumber())
+            if (sector.getSectorNumber() == 35):
+                print()
             geneticAlgorithm(sector.getPopulation(), ranges)
+
+def createPolygonFromPopulation(pPopulation):
+    referencesCopy = pPopulation
+    polygonPoints = []
+    colors = []
+    for i in range(0,3):
+        lineIndex = random.randint(0, len(referencesCopy) - 1)
+        line = referencesCopy[lineIndex]
+        referencesCopy.pop(lineIndex)
+        colors += [line.getColor()]
+        lineFirstCoordinate = line.getFirstPoint()
+        lineSecondCoordinate = line.getSecondPoint()
+        pointXCoordinate = random.randint(lineFirstCoordinate[0], lineSecondCoordinate[0])
+        if lineFirstCoordinate[1] < lineSecondCoordinate[1]:
+            pointYCoordinate = random.randint(lineFirstCoordinate[1], lineSecondCoordinate[1])
+        else:
+            pointYCoordinate = random.randint(lineSecondCoordinate[1], lineFirstCoordinate[1])
+        polygonPoints += [str(pointXCoordinate) + "," + str(pointYCoordinate)]
+        if len(referencesCopy) == 0:
+            break
+
+    averageColor = [0, 0, 0]
+    for color in colors:
+        averageColor[0] += color.getRed()
+        averageColor[1] += color.getGreen()
+        averageColor[2] += color.getBlue()
+    averageColor[0] = int(averageColor[0] / len(colors))
+    averageColor[1] = int(averageColor[1] / len(colors))
+    averageColor[2] = int(averageColor[2] / len(colors))
+    htmlPolygon = createHtmlPolygon(polygonPoints, Color(averageColor[0], averageColor[1], averageColor[2], 0, 0))
+    Constants.HTMLFILE.write(htmlPolygon)
+
 
 def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
     actualPopulation = pPopulation
     for generation in range(0, Constants.NUMBER_OF_GENERATIONS):
         # Primero se calcula el "fitness" de cada individuo
-        if len(actualPopulation) > 0:
-            fitnessFunction(actualPopulation)
-        else:
-            print("Ya no hay poblacion con la que trabajar")
-            break
+        fitnessFunction(actualPopulation)
+
         # Luego se ordena la poblacion segun su "fitness"
         """
         for individual in actualPopulation:
@@ -211,7 +248,7 @@ def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
         # Un 10% pasa automaticamente a la siguiente generacion
         s = int((10 * len(actualPopulation)) / 100)
         newGeneration = []
-        newGeneration.extend(actualPopulation[:s])
+        newGeneration.extend(actualPopulation)
         for _ in range(0, int(len(actualPopulation)/2 - 1)):
             parent1 = random.choice(actualPopulation)
             parent2 = random.choice(actualPopulation)
@@ -219,7 +256,10 @@ def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
             child.mutate()
             newGeneration.append(child)
         actualPopulation = newGeneration
-
+        if len(actualPopulation) == 0:
+            print("Ya no hay poblacion con la que trabajar")
+            break
+        createPolygonFromPopulation(actualPopulation)
     print("-----------------")
 
 def fitnessFunction(pPopulation):
@@ -239,17 +279,7 @@ def fitnessFunction(pPopulation):
         else:
             pPopulation.pop(individualIndex)
             AVG = int(sum(x.getChromosome() for x in pPopulation) / sectorTarget[1])
-    """
-    for index, individual in enumerate(pPopulation):
-        chromosome = individual.getChromosome()
-        if chromosome != None:
-            x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
-            if AVG * x < AVG:
-                individual.setFitness(1)
-            else:
-                pPopulation.pop(index)
-                AVG = int(sum(x.getChromosome() for x in pPopulation) / sectorTarget[1])
-    """
+
 def doColorPromedy(colorList):
     r = g = b = 0
     for colorPerList in (colorList):

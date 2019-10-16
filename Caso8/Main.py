@@ -34,19 +34,15 @@ def createSectorsLineDivision(pImage):
         imageForDrawing.line([(x, 0), (x, imageHeight)], fill="red", width=1)
         imageForDrawing.line([(0, y), (imageWidth, y)], fill="red", width=1)
 
-    # image.show()
+    image.show()
 
 if __name__ == "__main__" :
     # Create the object Image
-    image = openImage(Constants.IMAGES[1])
+    image = openImage(Constants.IMAGES[0])
 
     # Creating samples and define colors
     sampleLists = createSectors()
     createColorsSamples(image, sampleLists)
-
-    # Creation of Population
-    createPopulationPerSector(sampleLists, image)
-    createChromosomeRepresentation(sampleLists)
 
     # population = createPopulationPerSector(sampleLists, image)
     # createChromosomeRepresentation(population)
@@ -57,11 +53,15 @@ if __name__ == "__main__" :
     Constants.HTMLFILE.write(Constants.HTML1)
 
     # Lines that divide by sector the image
-    createSectorsLineDivision(image)
+    #createSectorsLineDivision(image)
 
     # Creation of sectors and polygons
     createSectors()
     polygonCreation(sampleLists)
+
+    # Creation of Population
+    createPopulationPerSector(sampleLists, image)
+    createChromosomeRepresentation(sampleLists)
 
     # Completing the HTML File with the polygons from polygonCreation
     Constants.HTMLFILE.write(Constants.HTML2)
