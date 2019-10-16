@@ -1,4 +1,4 @@
-from Sector import getSectorWithTheLowestPercentageOfWhite
+import Constants
 
 
 class Polygon:
@@ -6,24 +6,26 @@ class Polygon:
         self.__pointsList = []
 
 
-def polygonCreation(pSectorsList, adjMatrix):
+def polygonCreation(pSectorsList):
     for sectorIndex, sector in enumerate(pSectorsList):
-        if sector.getWhitePercentaje() != 0:
+        if sector.getWhitePercentage() != 100:
             polygonPoints = []
-            adjacencyList = adjMatrix.getAllAdjacencies(sectorIndex)
-            colorSample = sector.getRandomColorSample()
-            polygonPoints += [str(colorSample.getXCoordinate) + "," + str(colorSample.getYCoordinate())]
-            while len(adjacencyList) != 0 and len(polygonPoints) < 3:
-                sectorWithLowestWhitePercentage = getSectorWithTheLowestPercentageOfWhite(pSectorsList, adjacencyList)
-                if sectorWithLowestWhitePercentage.getWhitePercentaje() != 100:
-                    colorSample = sectorWithLowestWhitePercentage.getRandomColorSample()
-                    polygonPoints += [str(colorSample.getXCoordinate) + "," + str(colorSample.getYCoordinate())]
-                    print(adjacencyList)
-                if(sectorWithLowestWhitePercentage.getSectorNumber() - 1) in adjacencyList:
-                    adjacencyList.remove(sectorWithLowestWhitePercentage.getSectorNumber() - 1)
+            sector.sortNonWhiteColorsSamplesByXCoordinate()
+            colorSampleAtLeft = sector.getNonWhiteSamples()[0]
+            colorSampleAtRight = sector.getNonWhiteSamples()[len(sector.getNonWhiteSamples()) - 1]
+            sector.sortNonWhiteColorsSamplesByYCoordinate()
+            colorSampleAtTop = sector.getNonWhiteSamples()[0]
+            colorSampleAtBottom = sector.getNonWhiteSamples()[len(sector.getNonWhiteSamples()) - 1]
 
-            if len(polygonPoints) >= 3:
-                htmlPolygon = createHtmlPolygon(polygonPoints, colorSample)
+            polygonPoints += [str(colorSampleAtTop.getXCoordinate()) + "," + str(colorSampleAtTop.getYCoordinate())]
+            polygonPoints += [str(colorSampleAtLeft.getXCoordinate()) + "," + str(colorSampleAtLeft.getYCoordinate())]
+
+            polygonPoints += [str(colorSampleAtBottom.getXCoordinate()) + "," + str(colorSampleAtBottom.getYCoordinate())]
+            polygonPoints += [str(colorSampleAtRight.getXCoordinate()) + "," + str(colorSampleAtRight.getYCoordinate())]
+
+            averageColor = sector.getAverageColor()
+            htmlPolygon = createHtmlPolygon(polygonPoints, averageColor)
+            Constants.HTMLFILE.write(htmlPolygon)
 
 
 def createHtmlPolygon(pointsList, pColor):
@@ -37,5 +39,5 @@ def createHtmlPolygon(pointsList, pColor):
                   + str(colorRed) + \
                   ',' + str(colorGreen) + \
                   ',' + str(colorBlue) + \
-                  ');stroke:black;stroke-width:1" />\n'
+                  ')" />\n'
     return htmlPolygon
