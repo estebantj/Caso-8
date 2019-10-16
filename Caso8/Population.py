@@ -29,7 +29,26 @@ class line:
         secondCoordinate = random.choice([self.__secondCoordinate, pLine2.getSecondPoint()])
         firstParentChromosome = self.__chromosome
         secondParentChromosome = pLine2.getChromosome()
-        newChromosome = 0
+        byteTransformation = "0" + str(Constants.AMOUNT_OF_BITS) + "b"
+        firstParentInBytes = format(firstParentChromosome, byteTransformation)
+        secondParentInBytes = format(secondParentChromosome, byteTransformation)
+        amountOfBitsForFirstParent = random.randint(1, 7)
+        firstParentPart = ""
+        secondParentPart = ""
+        for bitsPerFirstParent in range(0, amountOfBitsForFirstParent):
+            firstParentPart += str(firstParentInBytes[bitsPerFirstParent])
+
+        for bitsPerSecondParent in range(amountOfBitsForFirstParent, len(secondParentInBytes)):
+            secondParentPart += str(secondParentInBytes[bitsPerSecondParent])
+
+        # print("First Parent --------------------------")
+        # print(firstParentInBytes)
+        # print(firstParentPart)
+        # print("Second Parent --------------------------")
+        # print(secondParentInBytes)
+        # print(secondParentPart)
+        # print(int(firstParentPart + secondParentPart, 2))
+        newChromosome = int(firstParentPart + secondParentPart, 2)
         firstParentColor = self.__color
         secondParentColor = pLine2.getColor()
         newColorRed = int((firstParentColor.getRed() + secondParentColor.getRed()) / 2)
@@ -196,6 +215,7 @@ def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
             child = parent1.mate(parent2)
             newGeneration.append(child)
         actualPopulation = newGeneration
+
     print("-----------------")
 
 def fitnessFunction(pPopulation):
