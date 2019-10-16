@@ -113,5 +113,6 @@ class Sector:
     def getBytesAverage(self):
         return self.__bytesAverage
 
+
     def __str__(self):
         return "Sector Number: " + str(self.__sectorNumber)
