@@ -9,7 +9,7 @@ class line:
     def __init__(self, pFirstCoordinate, pSecondCoordinate, pColor, pSector):
         self.__firstCoordinate = pFirstCoordinate
         self.__secondCoordinate = pSecondCoordinate
-        self.__color = pColor
+        self.__color = Color(pColor[0], pColor[1], pColor[2], 0, 0)
         self.__colorRange = getColorRange(pColor[0], pColor[1], pColor[2])
         self.__sector = pSector
         self.__fitness = 0
@@ -25,7 +25,29 @@ class line:
         return self.__colorRange
 
     def mate(self, pLine2):
-        return line(self.__firstCoordinate, self.__secondCoordinate, self.__color, self.__sector)
+        firstCoordinate = random.choice([self.__firstCoordinate, pLine2.getFirstPoint()])
+        secondCoordinate = random.choice([self.__secondCoordinate, pLine2.getSecondPoint()])
+        firstParentChromosome = self.__chromosome
+        secondParentChromosome = pLine2.getChromosome()
+        newChromosome = 0
+        firstParentColor = self.__color
+        secondParentColor = pLine2.getColor()
+        newColorRed = int((firstParentColor.getRed() + secondParentColor.getRed()) / 2)
+        newColorGreen = int((firstParentColor.getGreen() + secondParentColor.getGreen()) / 2)
+        newColorBlue = int((firstParentColor.getBlue() + secondParentColor.getBlue()) / 2)
+        child = line(firstCoordinate, secondCoordinate, [newColorRed, newColorGreen, newColorBlue], self.__sector)
+        child.setChromosome(newChromosome)
+        return child
+
+    def mutate(self):
+        randomBit = random.randint(0, Constants.AMOUNT_OF_BITS)
+        binaryNumberString = ""
+        for i in range(0, Constants.AMOUNT_OF_BITS):
+            if i != randomBit:
+                binaryNumberString += "0"
+            else:
+                binaryNumberString += "1"
+        binaryNumber = int(binaryNumberString, 2)
 
     def setFitness(self, pFitness):
         self.__fitness = pFitness
@@ -41,6 +63,9 @@ class line:
 
     def getSector(self):
         return self.__sector
+
+    def getColor(self):
+        return self.__color
 
 def getColorRange(pRed, pGreen, pBlue):
     if pRed <= 127 and pGreen <= 127 and pBlue <= 127:
