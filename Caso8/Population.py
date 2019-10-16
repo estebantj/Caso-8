@@ -67,6 +67,7 @@ class line:
             else:
                 binaryNumberString += "1"
         binaryNumber = int(binaryNumberString, 2)
+        self.__chromosome = self.__chromosome ^ binaryNumber
 
     def setFitness(self, pFitness):
         self.__fitness = pFitness
@@ -201,9 +202,11 @@ def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
             print("Ya no hay poblacion con la que trabajar")
             break
         # Luego se ordena la poblacion segun su "fitness"
+        """
         for individual in actualPopulation:
             if individual.getFitness() == 1:
-                actualPopulation += actualPopulation[individual]
+                actualPopulation += [actualPopulation[individual]]
+        """
         print("Tamaño de la poblacion actual: ", len(actualPopulation))
         # Un 10% pasa automaticamente a la siguiente generacion
         s = int((10 * len(actualPopulation)) / 100)
@@ -213,6 +216,7 @@ def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
             parent1 = random.choice(actualPopulation)
             parent2 = random.choice(actualPopulation)
             child = parent1.mate(parent2)
+            child.mutate()
             newGeneration.append(child)
         actualPopulation = newGeneration
 
@@ -224,13 +228,28 @@ def fitnessFunction(pPopulation):
     sectorTarget = sector.getTarget()
     sectorAverage = sector.getBytesAverage()
     AVG = int(sectorAverage / sectorTarget[1])
-    for individual in pPopulation:
+    individualIndex = 0
+    while individualIndex < len(pPopulation):
+        individual = pPopulation[individualIndex]
+        chromosome = individual.getChromosome()
+        x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
+        if AVG * x < AVG:
+            individual.setFitness(1)
+            individualIndex += 1
+        else:
+            pPopulation.pop(individualIndex)
+            AVG = int(sum(x.getChromosome() for x in pPopulation) / sectorTarget[1])
+    """
+    for index, individual in enumerate(pPopulation):
         chromosome = individual.getChromosome()
         if chromosome != None:
             x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
-            if AVG + x < AVG:
+            if AVG * x < AVG:
                 individual.setFitness(1)
-
+            else:
+                pPopulation.pop(index)
+                AVG = int(sum(x.getChromosome() for x in pPopulation) / sectorTarget[1])
+    """
 def doColorPromedy(colorList):
     r = g = b = 0
     for colorPerList in (colorList):
