@@ -198,9 +198,7 @@ def createChromosomeRepresentation(pSectorList):
                     Sum += ranges[rangeIndex][0]
             AVG = AVG // totalPopulation
             sector.setBytesAverage(AVG)
-            print("Sector actual:", sector.getSectorNumber())
-            if (sector.getSectorNumber() == 35):
-                print()
+            # print("Sector actual:", sector.getSectorNumber())
             geneticAlgorithm(sector.getPopulation(), ranges)
 
 def createPolygonFromPopulation(pPopulation):
@@ -215,6 +213,7 @@ def createPolygonFromPopulation(pPopulation):
         colors += [line.getColor()]
         lineFirstCoordinate = line.getFirstPoint()
         lineSecondCoordinate = line.getSecondPoint()
+
         if lineFirstCoordinate[0] < lineSecondCoordinate[0]:
             pointXCoordinate = random.randint(lineFirstCoordinate[0], lineSecondCoordinate[0])
         elif lineFirstCoordinate[0] > lineSecondCoordinate[0]:
@@ -263,10 +262,10 @@ def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
             child.mutate()
             pPopulation.append(child)
         if len(pPopulation) == 0:
-            print("Ya no hay poblacion con la que trabajar")
+            # print("Ya no hay poblacion con la que trabajar")
             break
         createPolygonFromPopulation(pPopulation)
-    print("-----------------", len(pPopulation))
+    # print("-----------------", len(pPopulation))
 
 def fitnessFunction(pPopulation):
     sector = pPopulation[0].getSector()  # <------ Problema Aqui
@@ -275,16 +274,21 @@ def fitnessFunction(pPopulation):
     sectorAverage = sector.getBytesAverage()
     AVG = int(sectorAverage / sectorTarget[1])
     individualIndex = 0
+    newPopulation = []
     while individualIndex < len(pPopulation):
         individual = pPopulation[individualIndex]
         chromosome = individual.getChromosome()
         x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
-        if AVG * x < AVG:
+        if AVG + x > AVG:
             individual.setFitness(1)
-            individualIndex += 1
-        else:
+            newPopulation += [individual]
             pPopulation.pop(individualIndex)
-            AVG = int(sum(x.getChromosome() for x in pPopulation) / sectorTarget[1])
+            if len(pPopulation) == 0:
+                break
+            AVG = int(sum(x.getChromosome() for x in pPopulation) / len(pPopulation) / sectorTarget[1])
+        else:
+            individualIndex += 1
+    pPopulation = newPopulation
 
 def doColorPromedy(colorList):
     r = g = b = 0

@@ -16,7 +16,7 @@ HTML1 = " \
             #base {\n \
                 width : 1024px;\n \
                 height: 1024px;\n \
-                margin-left: 300px;\n \
+                margin-left: 10px;\n \
                 margin-top: 10px;\n \
             }\n \
         </style>\n \
