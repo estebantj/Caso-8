@@ -2,6 +2,7 @@ import Constants
 from Colors import Color
 from PIL import Image, ImageDraw
 import random
+from Polygons import createHtmlPolygon
 
 listOfLines = []
 
@@ -29,25 +30,48 @@ class line:
         secondCoordinate = random.choice([self.__secondCoordinate, pLine2.getSecondPoint()])
         firstParentChromosome = self.__chromosome
         secondParentChromosome = pLine2.getChromosome()
-        newChromosome = 0
+        byteTransformation = "0" + str(Constants.AMOUNT_OF_BITS) + "b"
+        firstParentInBytes = format(firstParentChromosome, byteTransformation)
+        secondParentInBytes = format(secondParentChromosome, byteTransformation)
+        amountOfBitsForFirstParent = random.randint(1, 7)
+        firstParentPart = ""
+        secondParentPart = ""
+        for bitsPerFirstParent in range(0, amountOfBitsForFirstParent):
+            firstParentPart += str(firstParentInBytes[bitsPerFirstParent])
+
+        for bitsPerSecondParent in range(amountOfBitsForFirstParent, len(secondParentInBytes)):
+            secondParentPart += str(secondParentInBytes[bitsPerSecondParent])
+
+        # print("First Parent --------------------------")
+        # print(firstParentInBytes)
+        # print(firstParentPart)
+        # print("Second Parent --------------------------")
+        # print(secondParentInBytes)
+        # print(secondParentPart)
+        # print(int(firstParentPart + secondParentPart, 2))
+        newChromosome = int(firstParentPart + secondParentPart, 2)
         firstParentColor = self.__color
         secondParentColor = pLine2.getColor()
-        newColorRed = int((firstParentColor.getRed() + secondParentColor.getRed()) / 2)
-        newColorGreen = int((firstParentColor.getGreen() + secondParentColor.getGreen()) / 2)
-        newColorBlue = int((firstParentColor.getBlue() + secondParentColor.getBlue()) / 2)
+        sectorAverageColor = self.__sector.getAverageColor()
+        newColorRed = int((firstParentColor.getRed() + secondParentColor.getRed() + sectorAverageColor.getRed()) / 3)
+        newColorGreen = int((firstParentColor.getGreen() + secondParentColor.getGreen() + sectorAverageColor.getGreen()) / 3)
+        newColorBlue = int((firstParentColor.getBlue() + secondParentColor.getBlue() + sectorAverageColor.getBlue()) / 3)
         child = line(firstCoordinate, secondCoordinate, [newColorRed, newColorGreen, newColorBlue], self.__sector)
         child.setChromosome(newChromosome)
         return child
 
     def mutate(self):
-        randomBit = random.randint(0, Constants.AMOUNT_OF_BITS)
-        binaryNumberString = ""
-        for i in range(0, Constants.AMOUNT_OF_BITS):
-            if i != randomBit:
-                binaryNumberString += "0"
-            else:
-                binaryNumberString += "1"
-        binaryNumber = int(binaryNumberString, 2)
+        probability = random.random()
+        if 0 < probability < 0.07:
+            randomBit = random.randint(0, Constants.AMOUNT_OF_BITS)
+            binaryNumberString = ""
+            for i in range(0, Constants.AMOUNT_OF_BITS):
+                if i != randomBit:
+                    binaryNumberString += "0"
+                else:
+                    binaryNumberString += "1"
+            binaryNumber = int(binaryNumberString, 2)
+            self.__chromosome = self.__chromosome ^ binaryNumber
 
     def setFitness(self, pFitness):
         self.__fitness = pFitness
@@ -118,15 +142,19 @@ def createPopulationPerSector(pSectorList, pImage):
         if sector.getWhitePercentage() != 100:
             for amountOfLines in range(sector.getYRange()[0], sector.getYRange()[1], 2):
                 colorList = []
+                startCoordinate = None
+                endCoordinate = None
                 for pixelsPerLine in range(sector.getXRange()[0], sector.getXRange()[1]):
                     r, g, b = rgbImage.getpixel((pixelsPerLine, amountOfLines))
                     newColor = Color(r, g, b, pixelsPerLine, amountOfLines)
                     if not newColor.isWhite():
+                        if startCoordinate is None:
+                            startCoordinate = [pixelsPerLine, amountOfLines]
+                        endCoordinate = [pixelsPerLine, amountOfLines]
                         colorList += [newColor]
                 if colorList != []:
                     r, g, b = doColorPromedy(colorList)
-                    lines = line([sector.getXRange()[0], amountOfLines],
-                                 [sector.getXRange()[1], amountOfLines], [r, g, b], sector)
+                    lines = line(startCoordinate, endCoordinate, [r, g, b], sector)
                     listOfLines += [lines]
                     sector.addIndividualToPopulation(lines)
 
@@ -170,33 +198,74 @@ def createChromosomeRepresentation(pSectorList):
                     Sum += ranges[rangeIndex][0]
             AVG = AVG // totalPopulation
             sector.setBytesAverage(AVG)
+            # print("Sector actual:", sector.getSectorNumber())
             geneticAlgorithm(sector.getPopulation(), ranges)
 
+def createPolygonFromPopulation(pPopulation):
+    referencesCopy = []
+    referencesCopy.extend(pPopulation)
+    polygonPoints = []
+    colors = []
+    for i in range(0,6):
+        lineIndex = random.randint(0, len(referencesCopy) - 1)
+        line = referencesCopy[lineIndex]
+        referencesCopy.pop(lineIndex)
+        colors += [line.getColor()]
+        lineFirstCoordinate = line.getFirstPoint()
+        lineSecondCoordinate = line.getSecondPoint()
+
+        if lineFirstCoordinate[0] < lineSecondCoordinate[0]:
+            pointXCoordinate = random.randint(lineFirstCoordinate[0], lineSecondCoordinate[0])
+        elif lineFirstCoordinate[0] > lineSecondCoordinate[0]:
+            pointXCoordinate = random.randint(lineSecondCoordinate[0], lineFirstCoordinate[0])
+        else:
+            pointXCoordinate = lineFirstCoordinate[0]
+
+        if lineFirstCoordinate[1] < lineSecondCoordinate[1]:
+            pointYCoordinate = random.randint(lineFirstCoordinate[1], lineSecondCoordinate[1])
+        elif lineFirstCoordinate[1] > lineSecondCoordinate[1]:
+            pointYCoordinate = random.randint(lineSecondCoordinate[1], lineFirstCoordinate[1])
+        else:
+            pointYCoordinate = lineFirstCoordinate[1]
+        polygonPoints += [str(pointXCoordinate) + "," + str(pointYCoordinate)]
+        if len(referencesCopy) == 0:
+            break
+
+    averageColor = [0, 0, 0]
+    for color in colors:
+        averageColor[0] += color.getRed()
+        averageColor[1] += color.getGreen()
+        averageColor[2] += color.getBlue()
+    averageColor[0] = int(averageColor[0] / len(colors))
+    averageColor[1] = int(averageColor[1] / len(colors))
+    averageColor[2] = int(averageColor[2] / len(colors))
+    htmlPolygon = createHtmlPolygon(polygonPoints, Color(averageColor[0], averageColor[1], averageColor[2], 0, 0))
+    Constants.HTMLFILE.write(htmlPolygon)
+
+
 def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
-    actualPopulation = pPopulation
     for generation in range(0, Constants.NUMBER_OF_GENERATIONS):
         # Primero se calcula el "fitness" de cada individuo
-        if len(actualPopulation) > 0:
-            fitnessFunction(actualPopulation)
-        else:
-            print("Ya no hay poblacion con la que trabajar")
-            break
-        # Luego se ordena la poblacion segun su "fitness"
-        for individual in actualPopulation:
-            if individual.getFitness() == 1:
-                actualPopulation += actualPopulation[individual]
-        print("Tamaño de la poblacion actual: ", len(actualPopulation))
-        # Un 10% pasa automaticamente a la siguiente generacion
-        s = int((10 * len(actualPopulation)) / 100)
-        newGeneration = []
-        newGeneration.extend(actualPopulation[:s])
-        for _ in range(0, int(len(actualPopulation)/2 - 1)):
-            parent1 = random.choice(actualPopulation)
-            parent2 = random.choice(actualPopulation)
+        fitnessFunction(pPopulation)
+        referencesCopy = []
+        referencesCopy.extend(pPopulation)
+        while len(referencesCopy)/10 > 2:
+            firstParentIndex = random.randrange(0, len(referencesCopy))
+            parent1 = referencesCopy[firstParentIndex]
+            referencesCopy.pop(firstParentIndex)
+
+            secondParentIndex = random.randrange(0, len(referencesCopy))
+            parent2 = referencesCopy[secondParentIndex]
+            referencesCopy.pop(secondParentIndex)
+
             child = parent1.mate(parent2)
-            newGeneration.append(child)
-        actualPopulation = newGeneration
-    print("-----------------")
+            child.mutate()
+            pPopulation.append(child)
+        if len(pPopulation) == 0:
+            # print("Ya no hay poblacion con la que trabajar")
+            break
+        createPolygonFromPopulation(pPopulation)
+    # print("-----------------", len(pPopulation))
 
 def fitnessFunction(pPopulation):
     sector = pPopulation[0].getSector()  # <------ Problema Aqui
@@ -204,12 +273,22 @@ def fitnessFunction(pPopulation):
     sectorTarget = sector.getTarget()
     sectorAverage = sector.getBytesAverage()
     AVG = int(sectorAverage / sectorTarget[1])
-    for individual in pPopulation:
+    individualIndex = 0
+    newPopulation = []
+    while individualIndex < len(pPopulation):
+        individual = pPopulation[individualIndex]
         chromosome = individual.getChromosome()
-        if chromosome != None:
-            x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
-            if AVG + x < AVG:
-                individual.setFitness(1)
+        x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
+        if AVG + x > AVG:
+            individual.setFitness(1)
+            newPopulation += [individual]
+            pPopulation.pop(individualIndex)
+            if len(pPopulation) == 0:
+                break
+            AVG = int(sum(x.getChromosome() for x in pPopulation) / len(pPopulation) / sectorTarget[1])
+        else:
+            individualIndex += 1
+    pPopulation = newPopulation
 
 def doColorPromedy(colorList):
     r = g = b = 0

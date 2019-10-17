@@ -18,6 +18,7 @@ class Sector:
         self.__bytesRange = []
         self.__target = []
         self.__bytesAverage = 0
+        self.__averageColor = None
 
     def addColorSample(self, pColorSample):
         if pColorSample.isWhite():
@@ -51,15 +52,19 @@ class Sector:
         return self.__nonWhiteSamples
 
     def getAverageColor(self):
-        r, g, b = 0, 0, 0
-        for color in self.__nonWhiteSamples:
-            r += color.getRed()
-            g += color.getGreen()
-            b += color.getBlue()
-        r = int(r / len(self.__nonWhiteSamples))
-        g = int(g / len(self.__nonWhiteSamples))
-        b = int(b / len(self.__nonWhiteSamples))
-        return Color(r, g, b, 0, 0)
+        return self.__averageColor
+
+    def setAverageColor(self):
+        if len(self.__nonWhiteSamples) > 0:
+            r, g, b = 0, 0, 0
+            for color in self.__nonWhiteSamples:
+                r += color.getRed()
+                g += color.getGreen()
+                b += color.getBlue()
+            r = int(r / len(self.__nonWhiteSamples))
+            g = int(g / len(self.__nonWhiteSamples))
+            b = int(b / len(self.__nonWhiteSamples))
+            self.__averageColor = Color(r, g, b, 0, 0)
 
     def setXRange(self, pXRange):
         self.__xRange = pXRange
