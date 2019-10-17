@@ -198,7 +198,7 @@ def createChromosomeRepresentation(pSectorList):
                     Sum += ranges[rangeIndex][0]
             AVG = AVG // totalPopulation
             sector.setBytesAverage(AVG)
-            # print("Sector actual:", sector.getSectorNumber())
+            print("Sector actual:", sector.getSectorNumber())
             geneticAlgorithm(sector.getPopulation(), ranges)
 
 def createPolygonFromPopulation(pPopulation):
@@ -249,7 +249,7 @@ def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
         fitnessFunction(pPopulation)
         referencesCopy = []
         referencesCopy.extend(pPopulation)
-        while len(referencesCopy)/10 > 2:
+        while len(referencesCopy)/4 > 2:
             firstParentIndex = random.randrange(0, len(referencesCopy))
             parent1 = referencesCopy[firstParentIndex]
             referencesCopy.pop(firstParentIndex)
@@ -265,30 +265,47 @@ def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
             # print("Ya no hay poblacion con la que trabajar")
             break
         createPolygonFromPopulation(pPopulation)
-    # print("-----------------", len(pPopulation))
+    print("-----------------", len(pPopulation))
 
 def fitnessFunction(pPopulation):
-    sector = pPopulation[0].getSector()  # <------ Problema Aqui
+    sector = pPopulation[0].getSector()
+    sectorBytesRange = sector.getBytesRange()
+    sectorTarget = sector.getTarget()
+    sectorAverage = sector.getBytesAverage()
+    if sectorTarget[1] != 0:
+        AVG = int(sectorAverage / sectorTarget[1])
+        individualIndex = 0
+        newPopulation = []
+        while individualIndex < len(pPopulation):
+            individual = pPopulation[individualIndex]
+            chromosome = individual.getChromosome()
+            x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
+            if AVG + x > AVG:
+                individual.setFitness(1)
+                newPopulation += [individual]
+                pPopulation.pop(individualIndex)
+                if len(pPopulation) == 0:
+                    break
+                AVG = int(sum(x.getChromosome() for x in pPopulation) / len(pPopulation) / sectorTarget[1])
+            else:
+                individualIndex += 1
+        pPopulation = newPopulation
+
+def fitnessFunction2(pPopulation):
+    sector = pPopulation[0].getSector()
     sectorBytesRange = sector.getBytesRange()
     sectorTarget = sector.getTarget()
     sectorAverage = sector.getBytesAverage()
     AVG = int(sectorAverage / sectorTarget[1])
-    individualIndex = 0
-    newPopulation = []
-    while individualIndex < len(pPopulation):
-        individual = pPopulation[individualIndex]
+    for index, individual in enumerate(pPopulation):
         chromosome = individual.getChromosome()
-        x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
-        if AVG + x > AVG:
-            individual.setFitness(1)
-            newPopulation += [individual]
-            pPopulation.pop(individualIndex)
-            if len(pPopulation) == 0:
-                break
-            AVG = int(sum(x.getChromosome() for x in pPopulation) / len(pPopulation) / sectorTarget[1])
-        else:
-            individualIndex += 1
-    pPopulation = newPopulation
+        if chromosome != None:
+            x = int(abs(chromosome - sectorTarget[0]) / sectorTarget[1])
+            if AVG * x < AVG:
+                individual.setFitness(1)
+            else:
+                pPopulation.pop(index)
+                AVG = int(sum(x.getChromosome() for x in pPopulation) / sectorTarget[1])
 
 def doColorPromedy(colorList):
     r = g = b = 0
