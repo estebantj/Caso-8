@@ -52,23 +52,26 @@ class line:
         newChromosome = int(firstParentPart + secondParentPart, 2)
         firstParentColor = self.__color
         secondParentColor = pLine2.getColor()
-        newColorRed = int((firstParentColor.getRed() + secondParentColor.getRed()) / 2)
-        newColorGreen = int((firstParentColor.getGreen() + secondParentColor.getGreen()) / 2)
-        newColorBlue = int((firstParentColor.getBlue() + secondParentColor.getBlue()) / 2)
+        sectorAverageColor = self.__sector.getAverageColor()
+        newColorRed = int((firstParentColor.getRed() + secondParentColor.getRed() + sectorAverageColor.getRed()) / 3)
+        newColorGreen = int((firstParentColor.getGreen() + secondParentColor.getGreen() + sectorAverageColor.getGreen()) / 3)
+        newColorBlue = int((firstParentColor.getBlue() + secondParentColor.getBlue() + sectorAverageColor.getBlue()) / 3)
         child = line(firstCoordinate, secondCoordinate, [newColorRed, newColorGreen, newColorBlue], self.__sector)
         child.setChromosome(newChromosome)
         return child
 
     def mutate(self):
-        randomBit = random.randint(0, Constants.AMOUNT_OF_BITS)
-        binaryNumberString = ""
-        for i in range(0, Constants.AMOUNT_OF_BITS):
-            if i != randomBit:
-                binaryNumberString += "0"
-            else:
-                binaryNumberString += "1"
-        binaryNumber = int(binaryNumberString, 2)
-        self.__chromosome = self.__chromosome ^ binaryNumber
+        probability = random.random()
+        if 0 < probability < 0.07:
+            randomBit = random.randint(0, Constants.AMOUNT_OF_BITS)
+            binaryNumberString = ""
+            for i in range(0, Constants.AMOUNT_OF_BITS):
+                if i != randomBit:
+                    binaryNumberString += "0"
+                else:
+                    binaryNumberString += "1"
+            binaryNumber = int(binaryNumberString, 2)
+            self.__chromosome = self.__chromosome ^ binaryNumber
 
     def setFitness(self, pFitness):
         self.__fitness = pFitness
@@ -201,21 +204,30 @@ def createChromosomeRepresentation(pSectorList):
             geneticAlgorithm(sector.getPopulation(), ranges)
 
 def createPolygonFromPopulation(pPopulation):
-    referencesCopy = pPopulation
+    referencesCopy = []
+    referencesCopy.extend(pPopulation)
     polygonPoints = []
     colors = []
-    for i in range(0,3):
+    for i in range(0,6):
         lineIndex = random.randint(0, len(referencesCopy) - 1)
         line = referencesCopy[lineIndex]
         referencesCopy.pop(lineIndex)
         colors += [line.getColor()]
         lineFirstCoordinate = line.getFirstPoint()
         lineSecondCoordinate = line.getSecondPoint()
-        pointXCoordinate = random.randint(lineFirstCoordinate[0], lineSecondCoordinate[0])
+        if lineFirstCoordinate[0] < lineSecondCoordinate[0]:
+            pointXCoordinate = random.randint(lineFirstCoordinate[0], lineSecondCoordinate[0])
+        elif lineFirstCoordinate[0] > lineSecondCoordinate[0]:
+            pointXCoordinate = random.randint(lineSecondCoordinate[0], lineFirstCoordinate[0])
+        else:
+            pointXCoordinate = lineFirstCoordinate[0]
+
         if lineFirstCoordinate[1] < lineSecondCoordinate[1]:
             pointYCoordinate = random.randint(lineFirstCoordinate[1], lineSecondCoordinate[1])
-        else:
+        elif lineFirstCoordinate[1] > lineSecondCoordinate[1]:
             pointYCoordinate = random.randint(lineSecondCoordinate[1], lineFirstCoordinate[1])
+        else:
+            pointYCoordinate = lineFirstCoordinate[1]
         polygonPoints += [str(pointXCoordinate) + "," + str(pointYCoordinate)]
         if len(referencesCopy) == 0:
             break
@@ -233,34 +245,28 @@ def createPolygonFromPopulation(pPopulation):
 
 
 def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
-    actualPopulation = pPopulation
     for generation in range(0, Constants.NUMBER_OF_GENERATIONS):
         # Primero se calcula el "fitness" de cada individuo
-        fitnessFunction(actualPopulation)
+        fitnessFunction(pPopulation)
+        referencesCopy = []
+        referencesCopy.extend(pPopulation)
+        while len(referencesCopy)/2 > 2:
+            firstParentIndex = random.randrange(0, len(referencesCopy))
+            parent1 = referencesCopy[firstParentIndex]
+            referencesCopy.pop(firstParentIndex)
 
-        # Luego se ordena la poblacion segun su "fitness"
-        """
-        for individual in actualPopulation:
-            if individual.getFitness() == 1:
-                actualPopulation += [actualPopulation[individual]]
-        """
-        print("Tamaño de la poblacion actual: ", len(actualPopulation))
-        # Un 10% pasa automaticamente a la siguiente generacion
-        s = int((10 * len(actualPopulation)) / 100)
-        newGeneration = []
-        newGeneration.extend(actualPopulation)
-        for _ in range(0, int(len(actualPopulation)/2 - 1)):
-            parent1 = random.choice(actualPopulation)
-            parent2 = random.choice(actualPopulation)
+            secondParentIndex = random.randrange(0, len(referencesCopy))
+            parent2 = referencesCopy[secondParentIndex]
+            referencesCopy.pop(secondParentIndex)
+
             child = parent1.mate(parent2)
             child.mutate()
-            newGeneration.append(child)
-        actualPopulation = newGeneration
-        if len(actualPopulation) == 0:
+            pPopulation.append(child)
+        if len(pPopulation) == 0:
             print("Ya no hay poblacion con la que trabajar")
             break
-        createPolygonFromPopulation(actualPopulation)
-    print("-----------------")
+        createPolygonFromPopulation(pPopulation)
+    print("-----------------", len(pPopulation))
 
 def fitnessFunction(pPopulation):
     sector = pPopulation[0].getSector()  # <------ Problema Aqui

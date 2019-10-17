@@ -56,3 +56,4 @@ def createColorsSamples(pImage, pSampleList):
                     eachSector.reduceSectorProbability(percentageReduction)
     for eachSector in pSampleList:
         eachSector.setWhitePercentage()
+        eachSector.setAverageColor()
