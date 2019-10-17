@@ -250,7 +250,7 @@ def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
         fitnessFunction(pPopulation)
         referencesCopy = []
         referencesCopy.extend(pPopulation)
-        while len(referencesCopy)/2 > 2:
+        while len(referencesCopy)/10 > 2:
             firstParentIndex = random.randrange(0, len(referencesCopy))
             parent1 = referencesCopy[firstParentIndex]
             referencesCopy.pop(firstParentIndex)

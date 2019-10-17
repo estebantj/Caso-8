@@ -38,7 +38,7 @@ def createSectorsLineDivision(pImage):
 
 if __name__ == "__main__" :
     # Create the object Image
-    image = openImage(Constants.IMAGES[0])
+    image = openImage(Constants.IMAGES[5])
 
     # Creating samples and define colors
     sampleLists = createSectors()
@@ -57,7 +57,7 @@ if __name__ == "__main__" :
 
     # Creation of sectors and polygons
     createSectors()
-    polygonCreation(sampleLists)
+    #polygonCreation(sampleLists)
 
     # Creation of Population
     createPopulationPerSector(sampleLists, image)
