@@ -37,35 +37,43 @@ def createSectorsLineDivision(pImage):
     image.show()
 
 if __name__ == "__main__" :
-    # Create the object Image
-    image = openImage(Constants.IMAGES[7])
-
-    # Creating samples and define colors
-    sampleLists = createSectors()
-    createColorsSamples(image, sampleLists)
-
-    # population = createPopulationPerSector(sampleLists, image)
-    # createChromosomeRepresentation(population)
-
-
-    # Creation of the header of the HTML
+    divs = [Constants.START_DIV_1, Constants.START_DIV_2, Constants.START_DIV_3]
     Constants.HTMLFILE = open("View.html", "w")
     Constants.HTMLFILE.write(Constants.HTML1)
+    imageIndex = 3
+    for div in divs:
+        # Create the object Image
+        image = openImage(Constants.IMAGES[imageIndex])
 
-    # Lines that divide by sector the image
-    #createSectorsLineDivision(image)
+        # Creating samples and define colors
+        sampleLists = createSectors()
+        createColorsSamples(image, sampleLists)
 
-    # Creation of sectors and polygons
-    createSectors()
-    polygonCreation(sampleLists)
+        # population = createPopulationPerSector(sampleLists, image)
+        # createChromosomeRepresentation(population)
 
-    # Creation of Population
-    createPopulationPerSector(sampleLists, image)
-    createChromosomeRepresentation(sampleLists)
+        # Creation of the header of the HTML
 
-    # Completing the HTML File with the polygons from polygonCreation
-    Constants.HTMLFILE.write(Constants.HTML2)
-    Constants.HTMLFILE.close()
 
-    #print(adjacencyGraph.containsEdge(sampleLists[5].getSectorNumber() - 1, sampleLists[0].getSectorNumber() - 1))
-    print("Final")
+        Constants.HTMLFILE.write(div)
+
+        # Lines that divide by sector the image
+        #createSectorsLineDivision(image)
+
+        # Creation of sectors and polygons
+        createSectors()
+        polygonCreation(sampleLists)
+
+        input("PAUSE")
+
+        # Creation of Population
+        createPopulationPerSector(sampleLists, image)
+        createChromosomeRepresentation(sampleLists)
+
+        # Completing the HTML File with the polygons from polygonCreation
+        Constants.HTMLFILE.write(Constants.END_DIV)
+
+        #print(adjacencyGraph.containsEdge(sampleLists[5].getSectorNumber() - 1, sampleLists[0].getSectorNumber() - 1))
+        print("Final")
+        imageIndex += 1
+    Constants.HTMLFILE.write(Constants.END_FILE)
