@@ -33,7 +33,7 @@ class line:
         byteTransformation = "0" + str(Constants.AMOUNT_OF_BITS) + "b"
         firstParentInBytes = format(firstParentChromosome, byteTransformation)
         secondParentInBytes = format(secondParentChromosome, byteTransformation)
-        amountOfBitsForFirstParent = random.randint(1, 7)
+        amountOfBitsForFirstParent = random.randint(1, int(Constants.AMOUNT_OF_BITS/1.5))
         firstParentPart = ""
         secondParentPart = ""
         for bitsPerFirstParent in range(0, amountOfBitsForFirstParent):
@@ -249,7 +249,8 @@ def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
         fitnessFunction(pPopulation)
         referencesCopy = []
         referencesCopy.extend(pPopulation)
-        while len(referencesCopy)/4 > 2:
+        amountOfChildren = int(len(pPopulation) * 0.4)
+        for _ in range(0, amountOfChildren):
             firstParentIndex = random.randrange(0, len(referencesCopy))
             parent1 = referencesCopy[firstParentIndex]
             referencesCopy.pop(firstParentIndex)
@@ -259,6 +260,7 @@ def geneticAlgorithm(pPopulation, pCromosomeRepresentation):
             referencesCopy.pop(secondParentIndex)
 
             child = parent1.mate(parent2)
+
             child.mutate()
             pPopulation.append(child)
         if len(pPopulation) == 0:
